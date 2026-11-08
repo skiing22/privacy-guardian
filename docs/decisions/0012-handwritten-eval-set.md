@@ -18,3 +18,6 @@ NER v1 scores 0.978 span F1 on ai4privacy validation rows, but those come from t
 - 64 spans is small: one error moves F1 by ~1.5 points. Report counts with the scores.
 - Known gaps it exposes: landline numbers (rules only cover mobiles); UPI IDs have no type yet.
 - M2 fusion (FR-11) must beat the rules+NER baseline on this set.
+
+## Results
+Baseline rules+NER F1 0.763 (P 0.697, R 0.841); see `docs/results/handwritten-v1.md`.
