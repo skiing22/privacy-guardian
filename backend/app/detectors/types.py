@@ -12,10 +12,14 @@ class PiiType(StrEnum):
     IFSC = "IFSC"
     CARD = "CARD"
     IP_ADDRESS = "IP_ADDRESS"
+    GOV_ID = "GOV_ID"  # other government IDs (passport, licence, tax, ...)
     PERSON = "PERSON"
     LOCATION = "LOCATION"
-    ORG = "ORG"
+    ADDRESS = "ADDRESS"
+    ORG = "ORG"  # no training data yet (ADR-0010); kept for rules/LLM
     DATE = "DATE"
+    AGE = "AGE"  # quasi-identifier (FR-14)
+    GENDER = "GENDER"  # quasi-identifier (FR-14)
 
 
 @dataclass(frozen=True, slots=True)

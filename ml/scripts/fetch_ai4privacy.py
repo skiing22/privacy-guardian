@@ -35,6 +35,7 @@ def main() -> None:
     ds = load_dataset(DATASET)
 
     for split in ds:
+        print(f"{split} columns: {ds[split].column_names}")
         rows = ds[split].filter(lambda r: r["language"] == "en")
         if args.limit:
             rows = rows.select(range(min(args.limit, len(rows))))
@@ -44,7 +45,7 @@ def main() -> None:
         bad = 0
         out_path = OUT_DIR / f"ai4privacy_en_{split}.jsonl"
         with out_path.open("w", encoding="utf-8") as f:
-            for r in rows:
+            for i, r in enumerate(rows):
                 text = r["source_text"]
                 spans = []
                 for m in parse_mask(r["privacy_mask"]):
@@ -55,7 +56,8 @@ def main() -> None:
                     spans.append([start, end, label])
                     labels[label] += 1
                 locales[r.get("locale") or "?"] += 1
-                rec = {"id": r["id"], "locale": r.get("locale"), "text": text, "spans": spans}
+                row_id = r.get("id") or r.get("uid") or f"{split}-{i}"
+                rec = {"id": row_id, "locale": r.get("locale"), "text": text, "spans": spans}
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
         print(f"\n== {split}: {len(rows)} rows -> {out_path}  (bad offsets skipped: {bad})")
