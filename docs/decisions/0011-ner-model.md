@@ -20,3 +20,6 @@ Code: `ml/train_ner.ipynb`, helpers in `backend/app/detectors/ner_labels.py` (un
 ## Consequences
 - Weights (~260 MB) live in Google Drive, not git.
 - Training data has few Indian names: check with hand-written Indian samples; may need fine-tuning on the synthetic generator data later.
+
+## Results
+Span-level F1 0.978 on 5,000 validation rows; see `docs/results/ner-v1.md`.
