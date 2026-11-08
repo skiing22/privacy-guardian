@@ -14,5 +14,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0008](0008-hosting.md) | Hosting target | Open | 2026-11-08 |
 | [0009](0009-ner-dataset.md) | NER data: ai4privacy open-pii-masking-500k (English) | Accepted | 2026-11-09 |
 | [0010](0010-label-mapping.md) | ai4privacy labels to PiiType, merge split names/addresses | Accepted | 2026-11-09 |
+| [0011](0011-ner-model.md) | NER model: distilbert-base-cased on Colab, span-level metric | Accepted | 2026-11-09 |
 
 Template: [template.md](template.md)
