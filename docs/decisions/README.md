@@ -20,5 +20,7 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0014](0014-entity-linking.md) | Entity linking: normalize + union-find, no link when ambiguous | Accepted | 2026-11-18 |
 | [0015](0015-reid-risk.md) | Re-identification risk as estimated crowd size k | Accepted | 2026-11-18 |
 | [0016](0016-two-beliefs-and-decay.md) | Two Betas per type (sensitivity + precision), cautious estimate, decay | Accepted | 2026-11-18 |
+| [0017](0017-utility-policy.md) | Utility policy per span + document risk loop | Accepted | 2026-11-18 |
+| [0018](0018-graph-design.md) | Graph: parallel detectors, review interrupt, stricter verifier loop, checkpoints | Accepted | 2026-11-18 |
 
 Template: [template.md](template.md)
