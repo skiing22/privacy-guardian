@@ -1,0 +1,32 @@
+{"text": "Hi, I am Priya Venkataraman from Kozhikode. Call me on 98470 12345 or mail priya.v@gmail.com.", "spans": [[9, 27, "PERSON", 0.9993], [33, 42, "LOCATION", 0.9991], [55, 66, "PHONE", 0.9176], [75, 92, "EMAIL", 0.9821]]}
+{"text": "Patient Arjun Nair, age 34, admitted on 12/03/2026. Address: 14 MG Road, Kochi 682016.", "spans": [[8, 18, "PERSON", 0.9208], [24, 26, "AGE", 0.999], [40, 50, "DATE", 0.9998], [61, 71, "ADDRESS", 0.999], [73, 78, "LOCATION", 0.9851], [79, 85, "ADDRESS", 0.6291]]}
+{"text": "Dear Customer, your A/c XX4521 is debited Rs 12,500 on 05-11-2026. Not you? Call 1800-425-3800.", "spans": [[24, 30, "GOV_ID", 0.961], [55, 65, "DATE", 0.804], [81, 94, "PHONE", 0.7493]]}
+{"text": "Resume - Rohit Sharma | rohit.sharma92@outlook.com | +91 99876 54321 | Pune", "spans": [[9, 21, "PERSON", 0.9157], [24, 50, "EMAIL", 0.9779], [53, 68, "PHONE", 0.9997], [71, 75, "LOCATION", 0.9895]]}
+{"text": "My Aadhaar is 3948 1726 3059 and PAN is ABCPS1234K.", "spans": [[3, 10, "PERSON", 0.6644], [14, 18, "GOV_ID", 0.7547], [19, 28, "PHONE", 0.5701], [40, 50, "GOV_ID", 0.9992]]}
+{"text": "Please transfer to IFSC SBIN0070123, beneficiary Meera Iyer.", "spans": [[24, 35, "GOV_ID", 0.9986], [49, 59, "PERSON", 0.9991]]}
+{"text": "Card ending 1111 was used. Full card: 4111 1111 1111 1111, holder Sanjay Gupta.", "spans": [[12, 16, "ADDRESS", 0.9817], [38, 57, "PHONE", 0.9741], [66, 78, "PERSON", 0.9918]]}
+{"text": "Login from IP 192.168.45.12 at 10:42 pm was blocked.", "spans": [[14, 17, "GOV_ID", 0.5131], [17, 27, "PHONE", 0.8882]]}
+{"text": "Hey Ananya, meet me near Lulu Mall tomorrow, my number changed to 09447012345.", "spans": [[4, 10, "PERSON", 0.9997], [25, 34, "LOCATION", 0.9539], [66, 77, "GOV_ID", 0.5723]]}
+{"text": "DOB: 23-10-2002, Gender: Male, Name: Shubham Kumar.", "spans": [[5, 15, "DATE", 0.9531], [25, 29, "GENDER", 0.999], [37, 50, "PERSON", 0.9947]]}
+{"text": "The train 12618 Mangala Lakshadweep Express leaves at 13:15 from platform 2.", "spans": [[10, 15, "ADDRESS", 0.9945], [16, 35, "LOCATION", 0.8681]]}
+{"text": "Order #4029384756 has been shipped and will arrive in 3-5 days.", "spans": [[7, 17, "GOV_ID", 0.9977]]}
+{"text": "Dr. Lakshmi Menon will see you in room 204 on Monday, 16 November 2026.", "spans": [[4, 17, "PERSON", 0.9977], [39, 42, "ADDRESS", 0.9731], [54, 70, "DATE", 0.9993]]}
+{"text": "Send the documents to 22, Nehru Nagar, Bhopal - 462003.", "spans": [[22, 25, "ADDRESS", 0.7765], [26, 31, "LOCATION", 0.6187], [32, 37, "ADDRESS", 0.8262], [39, 45, "ADDRESS", 0.5457], [48, 54, "ADDRESS", 0.9983]]}
+{"text": "Aadhaar 5284-7163-9206 linked to mobile 7012345678 successfully.", "spans": [[8, 22, "GOV_ID", 0.7596], [40, 50, "GOV_ID", 0.9993]]}
+{"text": "Fatima Sheikh (F, 29) has applied for leave.", "spans": [[0, 13, "PERSON", 0.9906], [15, 16, "GENDER", 0.9945], [18, 20, "AGE", 0.9974]]}
+{"text": "Passport no. K8432917 issued at Thiruvananthapuram.", "spans": [[13, 21, "GOV_ID", 0.9994], [32, 50, "LOCATION", 0.9988]]}
+{"text": "Contact HR at hr.team@infosys-demo.in for the offer letter.", "spans": []}
+{"text": "GSTIN not required for orders below Rs 50,000.", "spans": []}
+{"text": "Payment of Rs 2,999 via card 5500 0000 0000 0004 failed.", "spans": [[29, 48, "GOV_ID", 0.8487]]}
+{"text": "Vikram Reddy and Sneha Reddy live at Flat 3B, Green Park, Hyderabad.", "spans": [[0, 12, "PERSON", 0.9912], [17, 28, "PERSON", 0.9916], [37, 44, "ADDRESS", 0.9929], [46, 56, "LOCATION", 0.9765], [58, 67, "LOCATION", 0.9843]]}
+{"text": "Your OTP is 482913. Do not share it with anyone.", "spans": [[12, 18, "ADDRESS", 0.9589]]}
+{"text": "Admitted: Rahul Das, 45 yrs, male, from Siliguri.", "spans": [[10, 19, "PERSON", 0.9972], [21, 23, "AGE", 0.9948], [40, 48, "LOCATION", 0.9993]]}
+{"text": "Employee PAN AAAPL1234C and Aadhaar 7401 9382 6513 verified.", "spans": [[13, 23, "GOV_ID", 0.9956], [28, 35, "GOV_ID", 0.6907], [36, 50, "GOV_ID", 0.7521]]}
+{"text": "Server 10.0.0.5 is down since 3 am.", "spans": []}
+{"text": "I moved from Chennai to Bengaluru last year.", "spans": [[13, 20, "LOCATION", 0.9949], [24, 33, "LOCATION", 0.9984]]}
+{"text": "Write to kavya.nambiar@yahoo.co.in or call 0495 2723456.", "spans": [[9, 31, "EMAIL", 0.8147], [43, 55, "PHONE", 0.999]]}
+{"text": "The meeting is on Monday in conference room B.", "spans": []}
+{"text": "Driving licence KL11 20190012345 belongs to Joseph Mathew.", "spans": [[16, 20, "GOV_ID", 0.9964], [21, 32, "GOV_ID", 0.7794], [44, 57, "PERSON", 0.9872]]}
+{"text": "Version 3.10.4 of the app fixes the login bug on Android 14.", "spans": [[57, 59, "AGE", 0.9497]]}
+{"text": "Hi Deepak, your appointment on 20/11/2026 is confirmed. Card 4012 8888 8888 1881 charged Rs 500.", "spans": [[3, 9, "PERSON", 0.9997], [31, 41, "DATE", 0.9998], [61, 80, "PHONE", 0.8509]]}
+{"text": "Refund to UPI neha.k@okicici processed for Neha Kapoor.", "spans": [[43, 54, "LOCATION", 0.4345]]}

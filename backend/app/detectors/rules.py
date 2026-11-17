@@ -45,10 +45,9 @@ RULES: tuple[Rule, ...] = (
     Rule(
         PiiType.PHONE,
         re.compile(
-            r"(?:(?<![\w+])\+91[ -]?|(?<!\d)0)?"
-            + _NOT_DIGIT_BEFORE
-            + r"[6-9]\d{4}[ -]?\d{5}"
-            + _NOT_DIGIT_AFTER
+            # prefix alternatives: +91, a leading 0, or nothing. The "no digit before"
+            # check sits inside each branch, else the leading 0 would block the match.
+            r"(?:(?<![\w+])\+91[ -]?|(?<!\d)0|(?<!\d))" + r"[6-9]\d{4}[ -]?\d{5}" + _NOT_DIGIT_AFTER
         ),
         v.indian_mobile_valid,
         SCORE_FORMAT,

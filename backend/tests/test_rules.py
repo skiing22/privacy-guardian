@@ -42,3 +42,11 @@ def test_no_match_inside_longer_number() -> None:
 
 def test_plain_text_has_no_pii() -> None:
     assert det.detect("The meeting is on Monday in room 204.") == []
+
+
+def test_phone_formats_found_whole() -> None:
+    # regression: "0" prefix used to block the match (M2 eval, ADR-0013)
+    for phone in ["09447012345", "9447012345", "+91 94470 12345", "+919447012345", "094470 12345"]:
+        text = f"call {phone} now"
+        found = [s.text for s in det.detect(text) if s.pii_type is PiiType.PHONE]
+        assert found == [phone], (phone, found)
