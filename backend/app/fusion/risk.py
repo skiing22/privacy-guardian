@@ -28,6 +28,7 @@ FRACTION: dict[str, float] = {
     "birth_year": 1 / 80,
     "city": 1 / 5000,  # towns and cities
     "pin": 1 / 19_000,  # PIN codes
+    "pin_prefix": 1 / 700,  # first 3 PIN digits (sorting district), after generalization
     "street_address": 4 / POPULATION,  # one household, ~4 people
 }
 
@@ -40,6 +41,7 @@ DIRECT = frozenset(
 
 _DOB_CONTEXT = re.compile(r"\b(?:dob|born|birth|d\.o\.b)\b", re.IGNORECASE)
 _PIN = re.compile(r"\d{6}")
+_PIN_PREFIX = re.compile(r"\d{3}X{3}")
 _AGE_RANGE = re.compile(r"\d+\s*[-–]\s*\d+")
 _YEAR_ONLY = re.compile(r"(?:19|20)\d{2}")
 
@@ -79,6 +81,8 @@ def classify(text: str, span: Span) -> str | None:
     if t is PiiType.LOCATION:
         return "city"
     if t is PiiType.ADDRESS:
+        if _PIN_PREFIX.fullmatch(v.strip()):
+            return "pin_prefix"
         return "pin" if _PIN.fullmatch(v.strip()) else "street_address"
     return None
 
