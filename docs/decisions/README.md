@@ -16,5 +16,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0010](0010-label-mapping.md) | ai4privacy labels to PiiType, merge split names/addresses | Accepted | 2026-11-09 |
 | [0011](0011-ner-model.md) | NER model: distilbert-base-cased on Colab, span-level metric | Accepted | 2026-11-09 |
 | [0012](0012-handwritten-eval-set.md) | Hand-written Indian eval set; rules+NER baseline | Accepted | 2026-11-09 |
+| [0013](0013-fusion.md) | Source-aware fusion: rules beat model, context words, address merge, noisy-OR | Accepted | 2026-11-18 |
 
 Template: [template.md](template.md)
