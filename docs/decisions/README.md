@@ -18,5 +18,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0012](0012-handwritten-eval-set.md) | Hand-written Indian eval set; rules+NER baseline | Accepted | 2026-11-09 |
 | [0013](0013-fusion.md) | Source-aware fusion: rules beat model, context words, address merge, noisy-OR | Accepted | 2026-11-18 |
 | [0014](0014-entity-linking.md) | Entity linking: normalize + union-find, no link when ambiguous | Accepted | 2026-11-18 |
+| [0015](0015-reid-risk.md) | Re-identification risk as estimated crowd size k | Accepted | 2026-11-18 |
 
 Template: [template.md](template.md)
