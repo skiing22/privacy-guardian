@@ -8,13 +8,13 @@ NER outputs cached in `data/eval/ner_cache_v1.jsonl`, so fusion can be re-scored
 | --- | --- | --- | --- |
 | Rules only | 1.000 | 0.286 | 0.444 |
 | NER only | 0.592 | 0.714 | 0.647 |
-| Greedy baseline (M1) | 0.697 | 0.841 | 0.763 |
-| **Fusion v1** | **0.953** | **0.968** | **0.961** |
+| Greedy baseline | 0.711 | 0.857 | 0.777 |
+| **Fusion v1** | **0.969** | **0.984** | **0.976** |
 
-Fusion v1 was measured before the phone-regex fix below; re-run with the cache to update.
+All rows include the phone-regex fix below (before it: baseline 0.763, fusion 0.961).
 
 ## Remaining errors
-- `09447012345` missed: **bug in rules**, not fusion. The phone regex's "no digit before" check blocked numbers with a leading 0. Fixed in `rules.py`, regression test added.
+- (fixed) `09447012345` missed: **bug in rules**, not fusion. The phone regex's "no digit before" check blocked numbers with a leading 0. Fixed in `rules.py`, regression test added.
 - `1800-425-3800` flagged as PHONE: a toll-free business number. Not personal; to be handled by policy (M2 utility step), not detection.
 - "Mangala Lakshadweep" (a train name) flagged as LOCATION: NER error; low priority.
 - "Neha Kapoor" missed after a UPI ID: NER error.
