@@ -28,11 +28,12 @@ from app.detectors.types import PiiType, Span
 from app.fusion.fuse import fuse
 from app.fusion.linking import link
 from app.fusion.normalize import normalize
+from app.fusion.risk import assess
 from app.graph.serde import make_serde
 from app.graph.state import Event, GraphState, ReviewItem, RoundRecord, ScanResult
 from app.policy.actions import PRIVACY_GAIN, Action, allowed, generalize
 from app.policy.beliefs import BeliefLearner, Feedback, InMemoryBeliefStore
-from app.policy.utility import PolicyConfig, decide
+from app.policy.utility import PolicyConfig, decide, visible_spans
 
 # What our own actions write into the text; the verifier must not flag these.
 _PLACEHOLDER = re.compile(r"\b[A-Z][A-Z_]*_\d+\b|\[REDACTED\]|[X*]{2,}")
@@ -69,10 +70,15 @@ def _timed(name: str, fn: Callable[[GraphState], dict[str, Any]]) -> Callable[..
 def filter_known(text: str, spans: list[Span], allowed_values: list[str]) -> list[Span]:
     """Drop spans that are our own placeholders or values we chose to leave visible."""
     marks = [(m.start(), m.end()) for m in _PLACEHOLDER.finditer(text)]
+    for v in {v for v in allowed_values if v.strip()}:
+        # pieces of a value we chose to show ("30" inside "30-34") are not leaks
+        marks += [(m.start(), m.end()) for m in re.finditer(re.escape(v), text)]
     ok = {v.lower() for v in allowed_values}
     out = []
     for s in spans:
-        if any(a < s.end and s.start < b for a, b in marks):
+        if any(a <= s.start and s.end <= b for a, b in marks):
+            continue
+        if any(a < s.end and s.start < b for a, b in marks) and _PLACEHOLDER.search(s.text):
             continue
         if s.text.lower() in ok or normalize(s.text, s.pii_type).lower() in ok:
             continue
@@ -202,7 +208,12 @@ def build_graph(
         return {"text": state["output"], "round": state.get("round", 0) + 1}
 
     def finalize(state: GraphState) -> dict[str, Any]:
-        return {"_info": f"done after {state.get('round', 0) + 1} round(s)"}
+        """Risk of the whole document: what round 1 left visible. Later rounds only protect
+        more, so this is an upper bound (conservative), never an under-estimate."""
+        first = state["history"][0]
+        risk = assess(first.text_in, visible_spans(list(first.spans), list(first.decisions)))
+        n = state.get("round", 0) + 1
+        return {"risk": risk, "_info": f"done after {n} round(s), risk {risk.level.value}"}
 
     g.add_node("fuse", _timed("fuse", fuse_node))
     g.add_node("review", _timed("review", review_gate))

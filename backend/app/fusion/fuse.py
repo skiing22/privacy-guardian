@@ -65,6 +65,13 @@ def clean(text: str, spans: list[Span]) -> list[Span]:
             end -= 1
         if start >= end:
             continue
+        nl = text.find("\n", start, end)
+        if nl != -1:  # a PII value never spans lines ("Kozhikode\nPatient"): keep line 1
+            end = nl
+            while end > start and text[end - 1] in _TRIM_CHARS:
+                end -= 1
+            if start >= end:
+                continue
         value = text[start:end]
         if value.lower().strip(".:") in STOPWORDS or _MASKED.search(value):
             continue

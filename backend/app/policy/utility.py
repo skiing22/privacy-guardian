@@ -69,10 +69,13 @@ def choose(span: Span, s: float, cfg: PolicyConfig) -> Decision:
     return Decision(best, "utility", us)
 
 
-def _visible(spans: list[Span], decisions: list[Decision]) -> list[Span]:
-    """What an attacker still sees: kept spans, and generalized ones in generalized form."""
+def visible_spans(spans: list[Span], decisions: list[Decision]) -> list[Span]:
+    """What an attacker still sees: kept spans, and generalized ones in generalized form.
+    Business numbers (toll-free) are not about a person, so they are not counted."""
     out = []
     for s, d in zip(spans, decisions, strict=True):
+        if d.reason == "business number":
+            continue
         if d.action is Action.KEEP:
             out.append(s)
         elif d.action is Action.GENERALIZE:
@@ -90,11 +93,14 @@ def _stronger(span: Span, current: Action) -> Action | None:
 def _pick_to_strengthen(text: str, spans: list[Span], ds: list[Decision]) -> int | None:
     best: tuple[int, float] | None = None
     for i, (s, d) in enumerate(zip(spans, ds, strict=True)):
-        if d.reason in ("override", "review") or d.action not in (Action.KEEP, Action.GENERALIZE):
+        if d.reason in ("override", "review", "business number") or d.action not in (
+            Action.KEEP,
+            Action.GENERALIZE,
+        ):
             continue
         if _stronger(s, d.action) is None:
             continue
-        vis = _visible([s], [d])[0]
+        vis = visible_spans([s], [d])[0]
         if s.pii_type in DIRECT and d.action is Action.KEEP:
             rank = -1.0  # direct identifiers first
         elif (c := classify(text, vis)) is not None:
@@ -120,7 +126,7 @@ def decide(
         for i, s in enumerate(spans)
     ]
 
-    risk = assess(text, _visible(spans, ds))
+    risk = assess(text, visible_spans(spans, ds))
     for _ in range(4 * len(spans) + 1):  # each step strengthens one span: bounded
         if _LEVEL_ORDER.index(risk.level) <= _LEVEL_ORDER.index(cfg.max_risk):
             break
@@ -130,7 +136,7 @@ def decide(
         nxt = _stronger(spans[i], ds[i].action)
         assert nxt is not None
         ds[i] = Decision(nxt, "risk", ds[i].utilities)
-        risk = assess(text, _visible(spans, ds))
+        risk = assess(text, visible_spans(spans, ds))
 
     tokens = {i: e.id for e in link(spans) for i in e.mentions}
     return PolicyResult(ds, risk, apply(text, spans, ds, tokens), tokens)

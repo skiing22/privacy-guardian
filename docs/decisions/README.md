@@ -22,5 +22,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0016](0016-two-beliefs-and-decay.md) | Two Betas per type (sensitivity + precision), cautious estimate, decay | Accepted | 2026-11-18 |
 | [0017](0017-utility-policy.md) | Utility policy per span + document risk loop | Accepted | 2026-11-18 |
 | [0018](0018-graph-design.md) | Graph: parallel detectors, review interrupt, stricter verifier loop, checkpoints | Accepted | 2026-11-18 |
+| [0019](0019-parsers-and-chunking.md) | Parsers with offset maps; overlapping chunks with edge repair | Accepted | 2026-11-18 |
 
 Template: [template.md](template.md)
