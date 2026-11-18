@@ -26,5 +26,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0020](0020-crypto-layer.md) | Crypto as built: HMAC tokens + collision check, AES-GCM vault with AAD, audit chain + anchor | Accepted | 2026-11-18 |
 | [0021](0021-prd-scope-decisions.md) | MVP scope and design: SQLite, polling, PDF->txt, 6 screens + S0/S7/S8, vault 7 days, eval set v2 | Accepted | 2026-11-19 |
 | [0022](0022-architecture-decisions.md) | VM hosting, session cookies, 4th storage key, model in HF repo, single worker | Accepted | 2026-11-19 |
+| [0023](0023-backend-implementation-choices.md) | Backend as built: SQL DDL + Core, strict encrypted checkpoints, output rebuilt from decisions, DOCX headers emptied | Proposed | 2026-11-19 |
 
 Template: [template.md](template.md)

@@ -83,7 +83,7 @@ def test_reviewer_keep_is_respected() -> None:
 
 def test_resume_after_restart() -> None:
     """FR-23: a new graph object (as after a server restart) continues the paused scan."""
-    saver = InMemorySaver(serde=make_serde())  # Postgres in production
+    saver = InMemorySaver(serde=make_serde())  # SQLite file in production (test_checkpoints.py)
     app1 = build_graph(deps([("Priya", T.PERSON, 0.6)]), checkpointer=saver)
     assert pending_review(start_scan(app1, "Thanks Priya", "t5")) is not None
     del app1

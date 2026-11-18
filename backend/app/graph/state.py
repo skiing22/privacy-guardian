@@ -32,6 +32,7 @@ class RoundRecord:
     decisions: tuple[Decision, ...]
     output: str
     risk: RiskReport
+    tokens: tuple[str | None, ...] = ()  # per span: its pseudonym if pseudonymized
 
 
 @dataclass(frozen=True)

@@ -45,6 +45,24 @@ def can_generalize(t: PiiType, value: str) -> bool:
     return False
 
 
+_GENERALIZABLE = {PiiType.AGE, PiiType.DATE, PiiType.ADDRESS}
+
+
+def actions_for_type(t: PiiType) -> list[Action]:
+    """Actions an admin may fix for a type (API 4.13), weakest first. Value-specific limits
+    still apply per item: a fixed "generalize" on a value that cannot be generalized
+    falls back to redact (utility.choose)."""
+    acts = [Action.KEEP]
+    if t in _GENERALIZABLE:
+        acts.append(Action.GENERALIZE)
+    if t in _MASKABLE:
+        acts.append(Action.MASK)
+    if t in _PSEUDONYMIZABLE:
+        acts.append(Action.PSEUDONYMIZE)
+    acts.append(Action.REDACT)
+    return acts
+
+
 def allowed(t: PiiType, value: str) -> list[Action]:
     """Actions that make sense for this type and value, weakest first."""
     acts = [Action.KEEP]

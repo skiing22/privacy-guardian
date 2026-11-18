@@ -36,6 +36,8 @@ from app.policy.actions import PRIVACY_GAIN, Action, allowed, generalize
 from app.policy.beliefs import BeliefLearner, Feedback, InMemoryBeliefStore
 from app.policy.utility import PolicyConfig, decide, visible_spans
 
+MAX_ROUNDS_DEFAULT = 3
+
 # What our own actions write into the text; the verifier must not flag these.
 _PLACEHOLDER = re.compile(r"\b[A-Z][A-Z_]*_(?:\d+|[0-9a-f]{6,64})\b|\[REDACTED\]|[X*]{2,}")
 
@@ -53,8 +55,11 @@ class GraphDeps:
     verify_threshold: float = 0.35  # stricter second pass: more recall
     review_threshold: float = 0.7
     min_precision: float = 0.6  # types flagged wrongly too often go to review
-    max_rounds: int = 3
+    max_rounds: int = MAX_ROUNDS_DEFAULT
     crypto: CryptoServices | None = None  # None: readable ids (PERSON_1), no vault/audit
+    # False: the caller writes "scan_completed" itself, in the same transaction as the
+    # scan's final rows (API 6), instead of the graph writing it in finalize.
+    audit_scan_completed: bool = True
 
 
 def _timed(name: str, fn: Callable[[GraphState], dict[str, Any]]) -> Callable[..., Any]:
@@ -201,9 +206,14 @@ def build_graph(
                 visible.append(s.text)
             elif d.action is Action.GENERALIZE:
                 visible.append(generalize(s.pii_type, s.text))
-        rec = RoundRecord(
-            state.get("round", 0), text, tuple(spans), tuple(res.decisions), res.output, res.risk
+        toks = tuple(
+            res.tokens.get(i) if d.action is Action.PSEUDONYMIZE else None
+            for i, d in enumerate(res.decisions)
         )
+        rec = RoundRecord(
+            state.get("round", 0), text, tuple(spans), tuple(res.decisions), res.output,
+            res.risk, toks,
+        )  # fmt: skip
         return {
             "decisions": res.decisions,
             "risk": res.risk,
@@ -235,7 +245,7 @@ def build_graph(
         first = state["history"][0]
         risk = assess(first.text_in, visible_spans(list(first.spans), list(first.decisions)))
         n = state.get("round", 0) + 1
-        if deps.crypto:
+        if deps.crypto and deps.audit_scan_completed:
             counts: dict[str, int] = {}
             for rec in state["history"]:
                 for sp, d in zip(rec.spans, rec.decisions, strict=True):
