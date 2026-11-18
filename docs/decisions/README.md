@@ -9,9 +9,9 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0003](0003-audit-hash-chain.md) | HMAC hash-chained audit log, with external anchor; signed reports demoted | Accepted, built in 0020 | 2026-11-08 |
 | [0004](0004-beta-sensitivity-beliefs.md) | Beta distribution for sensitivity beliefs | Accepted, refined by 0016 | 2026-11-08 |
 | [0005](0005-llm-optional-local.md) | LLM optional, local by default, never sees raw PII | Accepted | 2026-11-08 |
-| [0006](0006-stack.md) | FastAPI + React + PostgreSQL, Docker Compose | Accepted | 2026-11-08 |
+| [0006](0006-stack.md) | FastAPI + React + PostgreSQL, Docker Compose | Accepted, DB superseded for MVP by 0021 | 2026-11-08 |
 | [0007](0007-synthetic-pii-data.md) | Synthetic Indian PII data for training and tests | Accepted | 2026-11-08 |
-| [0008](0008-hosting.md) | Hosting target | Open | 2026-11-08 |
+| [0008](0008-hosting.md) | Hosting target | Decided in 0022 (D13) | 2026-11-08 |
 | [0009](0009-ner-dataset.md) | NER data: ai4privacy open-pii-masking-500k (English) | Accepted | 2026-11-09 |
 | [0010](0010-label-mapping.md) | ai4privacy labels to PiiType, merge split names/addresses | Accepted | 2026-11-09 |
 | [0011](0011-ner-model.md) | NER model: distilbert-base-cased on Colab, span-level metric | Accepted | 2026-11-09 |
@@ -24,5 +24,7 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0018](0018-graph-design.md) | Graph: parallel detectors, review interrupt, stricter verifier loop, checkpoints | Accepted | 2026-11-18 |
 | [0019](0019-parsers-and-chunking.md) | Parsers with offset maps; overlapping chunks with edge repair | Accepted | 2026-11-18 |
 | [0020](0020-crypto-layer.md) | Crypto as built: HMAC tokens + collision check, AES-GCM vault with AAD, audit chain + anchor | Accepted | 2026-11-18 |
+| [0021](0021-prd-scope-decisions.md) | MVP scope and design: SQLite, polling, PDF->txt, 6 screens + S0/S7/S8, vault 7 days, eval set v2 | Accepted | 2026-11-19 |
+| [0022](0022-architecture-decisions.md) | VM hosting, session cookies, 4th storage key, model in HF repo, single worker | Accepted | 2026-11-19 |
 
 Template: [template.md](template.md)

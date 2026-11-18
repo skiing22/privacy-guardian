@@ -21,3 +21,6 @@ data/audit.jsonl
 data/audit.anchor.json
 data/vault.json
 data/tokens.json
+# local runtime data (DATA_DIR) and frontend build
+.data/
+frontend/dist/

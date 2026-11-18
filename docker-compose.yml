@@ -1,26 +1,16 @@
+# Local run of the production image (ARCHITECTURE 16.3): one container, one data volume.
+# No database service: SQLite lives in the volume (D2).
 services:
-  db:
-    image: postgres:16
+  app:
+    build: .
+    env_file:
+      - path: .env
+        required: false
     environment:
-      POSTGRES_USER: pg
-      POSTGRES_PASSWORD: pg
-      POSTGRES_DB: privacy_guardian
-    ports: ["5432:5432"]
-    volumes: [pgdata:/var/lib/postgresql/data]
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pg"]
-      interval: 5s
-      retries: 10
-
-  backend:
-    build: ./backend
-    env_file: .env
-    environment:
-      DATABASE_URL: postgresql+psycopg://pg:pg@db:5432/privacy_guardian
+      DATA_DIR: /data
     ports: ["8000:8000"]
-    depends_on:
-      db:
-        condition: service_healthy
+    volumes:
+      - app-data:/data
 
 volumes:
-  pgdata:
+  app-data:
