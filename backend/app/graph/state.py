@@ -53,6 +53,7 @@ class ScanResult:
 
 
 class GraphState(TypedDict, total=False):
+    scan_id: str
     org: str
     original: str
     text: str  # text being scanned this round

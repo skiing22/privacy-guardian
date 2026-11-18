@@ -10,6 +10,7 @@ times and watch the next scan treat it differently.
 """
 
 import argparse
+import json
 import sys
 import time
 import uuid
@@ -17,6 +18,11 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from app.crypto.audit import Anchor
+from app.crypto.filestore import JsonlAuditStore, JsonTokenRegistry, JsonVaultStore
+from app.crypto.keys import KeyConfigError, KeyRing
+from app.crypto.services import CryptoServices
+from app.crypto.vault import VaultError
 from app.detectors.context import ContextDetector
 from app.detectors.rules import RuleDetector
 from app.detectors.types import Span
@@ -67,10 +73,33 @@ def fused_detector(detectors: dict[str, Detector]) -> Callable[[str], list[Span]
     return detect
 
 
+def load_keys() -> KeyRing:
+    try:
+        return KeyRing.from_env()
+    except KeyConfigError:
+        print("! PG_*_KEY not set: using fixed DEV keys (fine for a demo, never in production)")
+        return KeyRing.dev()
+
+
+def crypto_services(data_dir: Path, actor: str = "cli") -> CryptoServices:
+    return CryptoServices.build(
+        load_keys(),
+        audit_store=JsonlAuditStore(data_dir / "audit.jsonl"),
+        vault_store=JsonVaultStore(data_dir / "vault.json"),
+        registry=JsonTokenRegistry(data_dir / "tokens.json"),
+        actor=actor,
+    )
+
+
 def scan(
-    text: str, detectors: dict[str, Detector], learner: BeliefLearner, org: str, ask: Ask | None
+    text: str,
+    detectors: dict[str, Detector],
+    learner: BeliefLearner,
+    org: str,
+    ask: Ask | None,
+    crypto: CryptoServices | None = None,
 ) -> ScanResult:
-    deps = GraphDeps(detectors=detectors, learner=learner)
+    deps = GraphDeps(detectors=detectors, learner=learner, crypto=crypto)
     if ask is None:
         deps.review_threshold, deps.min_precision = 0.0, 0.0
     app = build_graph(deps)
@@ -112,7 +141,26 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--beliefs", default="../data/beliefs.json")
     sc.add_argument("--auto", action="store_true", help="no review questions")
     sc.add_argument("--columns", action="store_true", help="CSV: classify whole columns")
+    sc.add_argument("--no-crypto", action="store_true", help="readable ids, no vault/audit")
+    sc.add_argument("--data", default="../data")
+
+    rd = sub.add_parser("reidentify", help="token -> original value (admin, logged)")
+    rd.add_argument("token")
+    rd.add_argument("--reason", required=True)
+    rd.add_argument("--actor", default="admin-cli")
+    rd.add_argument("--role", default="admin")
+    rd.add_argument("--data", default="../data")
+
+    au = sub.add_parser("audit", help="verify or anchor the audit log")
+    au.add_argument("action", choices=["verify", "anchor", "show"])
+    au.add_argument("--data", default="../data")
+    au.add_argument("--anchor-file", default="../data/audit.anchor.json")
     args = ap.parse_args(argv)
+
+    if args.cmd == "reidentify":
+        return cmd_reidentify(args)
+    if args.cmd == "audit":
+        return cmd_audit(args)
 
     doc = parse_file(args.file)
     print(f"parsed {args.file}: {doc.fmt}, {len(doc.text):,} chars, {len(doc.segments)} segments")
@@ -135,13 +183,51 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {v.column:<16} {v.pii_type.value if v.pii_type else '-':<10} "
                   f"{v.share:.0%} of {v.sampled}")  # fmt: skip
 
-    res = scan(doc.text, detectors, learner, args.org, None if args.auto else ask_terminal)
+    crypto = None if args.no_crypto else crypto_services(Path(args.data))
+    ask = None if args.auto else ask_terminal
+    res = scan(doc.text, detectors, learner, args.org, ask, crypto)
     print_result(res, doc.locate)
 
     bpath.parent.mkdir(parents=True, exist_ok=True)
     bpath.write_text(store.to_json())
     print(f"\nbeliefs saved to {bpath}")
     return 0
+
+
+def cmd_reidentify(args: argparse.Namespace) -> int:
+    c = crypto_services(Path(args.data), actor=args.actor)
+    try:
+        value = c.vault.reidentify(args.token, args.actor, args.role, args.reason)
+    except VaultError as e:
+        print(f"refused: {e}")
+        return 1
+    print(f"{args.token} -> {value}   (logged as audit #{c.audit.store.all()[-1].seq})")
+    return 0
+
+
+def cmd_audit(args: argparse.Namespace) -> int:
+    c = crypto_services(Path(args.data))
+    apath = Path(args.anchor_file)
+    if args.action == "show":
+        for r in c.audit.store.all():
+            print(f"#{r.seq:<3} {r.ts}  {r.actor:<10} {r.event:<17} {json.dumps(r.payload)[:70]}")
+        return 0
+    if args.action == "anchor":
+        a = c.audit.anchor()
+        if a is None:
+            print("audit log is empty")
+            return 1
+        apath.write_text(json.dumps({"seq": a.seq, "mac": a.mac}))
+        print(f"anchored seq {a.seq}: {a.mac[:16]}...  (in production: copy this OFF the server)")
+        return 0
+    anchor = Anchor(**json.loads(apath.read_text())) if apath.exists() else None
+    res = c.audit.verify(anchor)
+    if res.ok:
+        extra = f", matches anchor at seq {anchor.seq}" if anchor else ", no anchor"
+        print(f"OK: {res.checked} records verified{extra}")
+        return 0
+    print(f"TAMPERED at record #{res.first_bad_seq}: {res.reason}")
+    return 2
 
 
 if __name__ == "__main__":

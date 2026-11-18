@@ -24,6 +24,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.types import Command, interrupt
 
+from app.crypto.services import CryptoServices
 from app.detectors.types import PiiType, Span
 from app.fusion.fuse import fuse
 from app.fusion.linking import link
@@ -36,7 +37,7 @@ from app.policy.beliefs import BeliefLearner, Feedback, InMemoryBeliefStore
 from app.policy.utility import PolicyConfig, decide, visible_spans
 
 # What our own actions write into the text; the verifier must not flag these.
-_PLACEHOLDER = re.compile(r"\b[A-Z][A-Z_]*_\d+\b|\[REDACTED\]|[X*]{2,}")
+_PLACEHOLDER = re.compile(r"\b[A-Z][A-Z_]*_(?:\d+|[0-9a-f]{6,64})\b|\[REDACTED\]|[X*]{2,}")
 
 
 class Detector(Protocol):
@@ -53,6 +54,7 @@ class GraphDeps:
     review_threshold: float = 0.7
     min_precision: float = 0.6  # types flagged wrongly too often go to review
     max_rounds: int = 3
+    crypto: CryptoServices | None = None  # None: readable ids (PERSON_1), no vault/audit
 
 
 def _timed(name: str, fn: Callable[[GraphState], dict[str, Any]]) -> Callable[..., Any]:
@@ -153,6 +155,14 @@ def build_graph(
                     if Action.PSEUDONYMIZE in allowed(s.pii_type, s.text)
                     else Action.REDACT
                 )
+        if deps.crypto:
+            verdicts = [
+                {"type": new_spans[int(a["index"])].pii_type.value, "verdict": a["verdict"]}
+                for a in answers
+            ]  # types and verdicts only: never the raw values (NFR-04)
+            deps.crypto.audit.append(
+                deps.crypto.actor, "review", {"scan": state.get("scan_id", ""), "answers": verdicts}
+            )
         keep_idx = [i for i in range(len(new_spans)) if i not in drop]
         remap = {old: new for new, old in enumerate(keep_idx)}
         # a human cleared these: the verifier must never overrule that
@@ -172,7 +182,19 @@ def build_graph(
             for i, s in enumerate(spans):
                 strong = [a for a in allowed(s.pii_type, s.text) if PRIVACY_GAIN[a] >= 0.9]
                 forced.setdefault(i, strong[0])
-        res = decide(text, spans, lambda t: deps.learner.sensitivity(org, t), deps.policy, forced)
+        tokenizer = deps.crypto.pseudonymizer.token if deps.crypto else None
+        res = decide(
+            text, spans, lambda t: deps.learner.sensitivity(org, t), deps.policy, forced, tokenizer
+        )
+        if deps.crypto:
+            used = {
+                res.tokens[i]
+                for i, d in enumerate(res.decisions)
+                if d.action is Action.PSEUDONYMIZE
+            }
+            for tok in used:
+                t, value = res.token_values[tok]
+                deps.crypto.vault.put(tok, t, value)
         visible = list(state.get("allowed_values", []))
         for s, d in zip(spans, res.decisions, strict=True):
             if d.action is Action.KEEP:
@@ -213,6 +235,24 @@ def build_graph(
         first = state["history"][0]
         risk = assess(first.text_in, visible_spans(list(first.spans), list(first.decisions)))
         n = state.get("round", 0) + 1
+        if deps.crypto:
+            counts: dict[str, int] = {}
+            for rec in state["history"]:
+                for sp, d in zip(rec.spans, rec.decisions, strict=True):
+                    k = f"{sp.pii_type.value}:{d.action.value}"
+                    counts[k] = counts.get(k, 0) + 1
+            deps.crypto.audit.append(
+                deps.crypto.actor,
+                "scan_completed",
+                {
+                    "scan": state.get("scan_id", ""),
+                    "org": state.get("org", "default"),
+                    "rounds": n,
+                    "risk": risk.level.value,
+                    "unresolved_leaks": len(state.get("leaks", [])),
+                    "counts": counts,
+                },
+            )
         return {"risk": risk, "_info": f"done after {n} round(s), risk {risk.level.value}"}
 
     g.add_node("fuse", _timed("fuse", fuse_node))
@@ -245,7 +285,10 @@ def _cfg(thread_id: str) -> Any:
 def start_scan(
     app: CompiledStateGraph[Any, Any, Any, Any], text: str, thread_id: str, org: str = "default"
 ) -> dict[str, Any]:
-    init = {"org": org, "original": text, "text": text, "round": 0, "allowed_values": []}
+    init = {
+        "scan_id": thread_id, "org": org, "original": text, "text": text,
+        "round": 0, "allowed_values": [],
+    }  # fmt: skip
     return dict(app.invoke(init, _cfg(thread_id)))
 
 
