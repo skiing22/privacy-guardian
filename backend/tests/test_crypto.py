@@ -34,7 +34,12 @@ def test_keyset_parsing_and_current() -> None:
 def test_bad_keys_rejected() -> None:
     with pytest.raises(KeyConfigError, match="bytes"):
         parse_keyset("abcd")  # too short
-    env = {"PG_TOKEN_KEY": H, "PG_AUDIT_KEY": H, "PG_VAULT_KEY": secrets.token_hex(32)}
+    env = {
+        "PG_TOKEN_KEY": H,
+        "PG_AUDIT_KEY": H,
+        "PG_VAULT_KEY": secrets.token_hex(32),
+        "PG_STORAGE_KEY": secrets.token_hex(32),
+    }
     with pytest.raises(KeyConfigError, match="two purposes"):
         KeyRing.from_env(env)
     with pytest.raises(KeyConfigError, match="missing"):
@@ -211,4 +216,4 @@ def test_chain_verifies_across_key_rotation() -> None:
 def test_dev_keyring_has_separate_keys() -> None:
     ring = KeyRing.dev()
     keys = {ring[p].current[1] for p in Purpose}
-    assert len(keys) == 3
+    assert len(keys) == 4  # token, audit, vault, storage (ADR-0022 D15)

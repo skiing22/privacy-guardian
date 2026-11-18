@@ -1,29 +1,65 @@
 # Privacy Guardian Agent v2
 
-Finds personal data (PII) in text and files, decides what to do with each item, and returns a safe copy
+Finds personal data in text and files, decides what to do with each item, and returns a safe copy
 with a tamper-evident audit log. Built on a LangGraph agent graph with parallel detectors, a human
 review pause, a leak-check loop, and learned sensitivity beliefs.
 
 ## Status
-M0 - project setup. See `docs/SRS.md` and `docs/decisions/`.
+Backend core (M0 to M4) done, tag `v0.5.0`. Web backend and app in progress: see
+[`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
-## Run locally
+## Documents
+| | |
+| --- | --- |
+| [PRD](docs/PRD.md) | What we build and why |
+| [DESIGN](docs/DESIGN.md) | How it looks and reads |
+| [ARCHITECTURE](docs/ARCHITECTURE.md) | How it is built |
+| [DATABASE](docs/DATABASE.md) | Data model |
+| [API](docs/API.md) | API contract |
+| [AGENTS](AGENTS.md) | Rules for every change |
+| [Decisions](docs/decisions/) | Why each choice was made (ADRs) |
+
+## Run with Docker
 ```bash
-cp .env.example .env
+cp .env.example .env          # optional in dev
 docker compose up --build
-curl localhost:8000/api/v1/health
+# open http://localhost:8000      health: http://localhost:8000/health
 ```
 
-## Dev without Docker
+## Develop without Docker
+Two terminals. Windows: use `.venv\Scripts\activate` instead of `source .venv/bin/activate`.
+
+**Backend** (http://127.0.0.1:8000)
 ```bash
 cd backend
 python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-pytest && ruff check . && mypy app
+pip install -e ".[dev]"            # add ",ml" for the real NER model: ".[dev,ml]"
 uvicorn app.main:app --reload
 ```
 
+**Frontend** (http://localhost:5173, proxies `/api` and `/health` to the backend)
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+## Checks (CI runs all of these; all must pass before merge)
+```bash
+# backend/
+ruff check . && ruff format --check . && mypy app && python scripts/check_layers.py && pytest --cov=app
+# frontend/
+npm run format:check && npm run typecheck && npm run lint && npm test && npm run build
+npm run gen:api                     # after any API change; commit src/api/schema.d.ts
+```
+
+## CLI demo (real model, no web app needed)
+```bash
+cd backend
+python -m app.cli scan ../data/samples/patient_note.txt
+python -m app.cli audit verify
+```
+
 ## Repo rules
-- `main` is always deployable; work on `feature/<name>` branches and merge by PR.
-- Conventional Commits, with requirement IDs: `feat(graph): add verifier loop (FR-21)`.
-- Every real design choice gets an ADR in `docs/decisions/`.
+See [AGENTS.md](AGENTS.md). In short: branch per change, Conventional Commits with requirement ids
+(`feat(graph): verifier loop (FR-21)`), green CI before merge, an ADR for every real decision.

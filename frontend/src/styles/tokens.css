@@ -1,0 +1,112 @@
+/*
+ * Design tokens from docs/DESIGN.md. The ONLY place colours, fonts, radii and motion
+ * values are defined. Tailwind's default palette is removed, so a colour that is not
+ * listed here cannot be used by accident (AGENTS.md 5.2).
+ */
+@theme {
+  --color-*: initial;
+
+  /* 2.1 base */
+  --color-desk: #eceff2;
+  --color-paper: #ffffff;
+  --color-ink: #1d232b;
+  --color-ink-muted: #58626e;
+  --color-rule: #d3d8de;
+  --color-rule-strong: #98a2ad;
+  --color-sign: #2a44b0;
+  --color-sign-soft: #e7ebfa;
+  --color-sign-hover: #22398f;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+
+  /* 2.2 highlighters (data families) */
+  --color-hl-identity: #ffefa3;
+  --color-hl-contact: #cbeed4;
+  --color-hl-id: #fad2df;
+  --color-hl-other: #e3e6ea;
+
+  /* 2.3 risk and status: text/border, then background */
+  --color-risk-low: #1f6b45;
+  --color-risk-low-bg: #e3f3ea;
+  --color-risk-medium: #8a5300;
+  --color-risk-medium-bg: #fcefd9;
+  --color-risk-high: #b3261e;
+  --color-risk-high-bg: #fbe4e2;
+  --color-risk-direct-bg: #8c1d18;
+
+  /* 3 typography: one family + mono for tokens and IDs */
+  --font-*: initial;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* 4.2 radius: sharp scale */
+  --radius-*: initial;
+  --radius-sm: 2px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* 4.3 depth: only the sheet and dialogs */
+  --shadow-*: initial;
+  --shadow-sheet: 0 1px 2px rgb(29 35 43 / 0.06), 0 8px 24px rgb(29 35 43 / 0.08);
+  --shadow-dialog: 0 16px 48px rgb(29 35 43 / 0.18);
+
+  /* 9 motion */
+  --ease-base: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 3.1 named text styles (Tailwind steps only) */
+@utility heading-5 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+@utility heading-6 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+@utility title-3 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+@utility title-4 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+@utility body-3 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+@utility body-6 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+@utility body-7 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 400;
+}
+@utility button-md {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+@utility button-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+@utility caption-2 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+@utility caption-4 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+}

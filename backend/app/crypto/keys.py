@@ -1,7 +1,8 @@
 """Secret keys, one set per purpose, each with a key id for rotation (FR-29, ADR-0002).
 
-Three purposes, three independent keys, so one leaked key does not break everything:
-  token -> HMAC pseudonyms (K1)     audit -> audit hash chain (K2)     vault -> AES-GCM (K3)
+Four purposes, four independent keys, so one leaked key does not break everything:
+  token -> HMAC pseudonyms (K1)     audit -> audit hash chain (K2)
+  vault -> AES-GCM vault (K3)       storage -> files and checkpoints at rest (K4, ADR-0022 D15)
 
 Env format (newest key LAST, older keys kept so old data can still be checked/decrypted):
   PG_TOKEN_KEY=k1:<64 hex chars>,k2:<64 hex chars>
@@ -23,12 +24,14 @@ class Purpose(StrEnum):
     TOKEN = "token"
     AUDIT = "audit"
     VAULT = "vault"
+    STORAGE = "storage"
 
 
 ENV_NAMES = {
     Purpose.TOKEN: "PG_TOKEN_KEY",
     Purpose.AUDIT: "PG_AUDIT_KEY",
     Purpose.VAULT: "PG_VAULT_KEY",
+    Purpose.STORAGE: "PG_STORAGE_KEY",
 }
 
 

@@ -18,9 +18,10 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from app.config import get_settings, load_keyring
 from app.crypto.audit import Anchor
 from app.crypto.filestore import JsonlAuditStore, JsonTokenRegistry, JsonVaultStore
-from app.crypto.keys import KeyConfigError, KeyRing
+from app.crypto.keys import KeyRing
 from app.crypto.services import CryptoServices
 from app.crypto.vault import VaultError
 from app.detectors.context import ContextDetector
@@ -74,11 +75,11 @@ def fused_detector(detectors: dict[str, Detector]) -> Callable[[str], list[Span]
 
 
 def load_keys() -> KeyRing:
-    try:
-        return KeyRing.from_env()
-    except KeyConfigError:
+    """Same rules as the app (config.load_keyring): DEV keys only when no key is set in dev."""
+    ring, dev = load_keyring(get_settings())
+    if dev:
         print("! PG_*_KEY not set: using fixed DEV keys (fine for a demo, never in production)")
-        return KeyRing.dev()
+    return ring
 
 
 def crypto_services(data_dir: Path, actor: str = "cli") -> CryptoServices:
