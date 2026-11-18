@@ -16,3 +16,8 @@ ml/models/
 data/raw/
 .hypothesis/
 data/beliefs.json
+# CLI demo stores (vault holds encrypted PII)
+data/audit.jsonl
+data/audit.anchor.json
+data/vault.json
+data/tokens.json

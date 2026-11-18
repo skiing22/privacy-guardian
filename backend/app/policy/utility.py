@@ -51,6 +51,7 @@ class PolicyResult:
     risk: RiskReport
     output: str
     tokens: dict[int, str]  # span index -> pseudonym
+    token_values: dict[str, tuple[PiiType, str]] = field(default_factory=dict)
 
 
 def utility(a: Action, s: float, cfg: PolicyConfig) -> float:
@@ -118,6 +119,7 @@ def decide(
     sensitivity: Callable[[PiiType], float],
     cfg: PolicyConfig,
     forced: Mapping[int, Action] | None = None,
+    tokenizer: Callable[[PiiType, str], str] | None = None,
 ) -> PolicyResult:
     """`forced`: span index -> action chosen by a human reviewer; never changed by the loop."""
     forced = forced or {}
@@ -138,8 +140,16 @@ def decide(
         ds[i] = Decision(nxt, "risk", ds[i].utilities)
         risk = assess(text, visible_spans(spans, ds))
 
-    tokens = {i: e.id for e in link(spans) for i in e.mentions}
-    return PolicyResult(ds, risk, apply(text, spans, ds, tokens), tokens)
+    tokens: dict[int, str] = {}
+    token_values: dict[str, tuple[PiiType, str]] = {}
+    for e in link(spans):
+        # one token per real entity: all mentions ("Rahul", "Mr. Sharma") share it
+        tok = tokenizer(e.pii_type, e.canonical) if tokenizer else e.id
+        token_values[tok] = (e.pii_type, e.canonical)
+        for i in e.mentions:
+            tokens[i] = tok
+    out = apply(text, spans, ds, tokens)
+    return PolicyResult(ds, risk, out, tokens, token_values)
 
 
 def apply(text: str, spans: list[Span], ds: list[Decision], tokens: dict[int, str]) -> str:
