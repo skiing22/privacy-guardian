@@ -505,8 +505,10 @@ Counters reset on restart; this is accepted for one process (ARCHITECTURE 14.3).
 | --- | --- |
 | Source | Private Hugging Face model repo `MODEL_REPO`, pinned to `MODEL_REVISION` (a commit hash, not a branch) |
 | Auth | `HF_TOKEN` passed as a **Docker build secret**, read-only scope; never written into an image layer, never in the runtime environment |
-| Integrity | After download, the SHA-256 of the weights must equal `MODEL_SHA256`, or the build fails |
-| Fault tolerance | 3 retries with backoff (2 s, 8 s, 30 s); a failed download fails the build, never ships an image without a model |
+| Integrity | After download, a manifest SHA-256 over **every** model file (name + content: weights, config, tokenizer) must equal `MODEL_SHA256`, or the build fails. Compute it once with `python backend/scripts/model_fetch.py hash <folder>`. Only safetensors weights are accepted (pickle files can run code) |
+| Fault tolerance | 3 retries with backoff (2 s, 8 s, 30 s) for network errors, 5xx and 429 (`Retry-After` honoured, capped at 60 s). A wrong token, missing repo or revision, or hash mismatch fails at once. Files move into place only after every check passed; a failed download fails the build, never ships an image without a model |
+| CI and trial builds | `MODEL_SOURCE=fake` builds a tiny random model with the same labels, so CI runs the real loading code without the private weights. Never shipped |
+| Code | `backend/scripts/model_fetch.py`, Dockerfile stages `model-hf` / `model-fake` |
 | Result | Weights baked into the image at `NER_MODEL_PATH`; the running app never contacts Hugging Face |
 
 ### 8.3 Development only

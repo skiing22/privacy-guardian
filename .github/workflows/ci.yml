@@ -42,11 +42,54 @@ jobs:
     needs: [backend, frontend]
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -t privacy-guardian .
-      - name: Container starts and reports healthy
+      # Tiny random model: the private weights never reach pull request builds (API 8.2).
+      - run: docker build --build-arg MODEL_SOURCE=fake -t privacy-guardian .
+      - name: Image holds no secrets
         run: |
-          docker run -d --name pg -p 8000:8000 privacy-guardian
-          for i in $(seq 1 30); do curl -sf localhost:8000/health && break; sleep 1; done
-          curl -sf localhost:8000/health
+          docker run --rm --entrypoint sh privacy-guardian -c '
+            test ! -e /app/.env && test ! -e /run/secrets/hf_token &&
+            ! env | grep -qi "hf_token\|PG_.*_KEY=." &&
+            test "$(cat /app/model/VERSION)" = fake-ci-model &&
+            test "$(id -u)" = 10001 && ! touch /app/model/x 2>/dev/null'
+          ! docker history --no-trunc privacy-guardian | grep -qi "hf_[a-z0-9]\{20,\}"
+      - name: Container loads the model and cleans a document
+        run: |
+          docker run -d --name pg -p 8000:8000 \
+            -e ADMIN_EMAIL=ci@example.com -e ADMIN_PASSWORD=ci-password-123 \
+            privacy-guardian
+          bash scripts/smoke.sh http://localhost:8000 ci@example.com ci-password-123 \
+            || { docker logs pg; exit 1; }
           curl -sf localhost:8000/scans | grep -q "<title>Privacy Guardian</title>"
+          docker rm -f pg
+
+  # The real model, only on main and only when the repo owner has set it up
+  # (Settings > Secrets: HF_TOKEN; Variables: MODEL_REPO, MODEL_REVISION, MODEL_SHA256).
+  docker-real-model:
+    if: github.ref == 'refs/heads/main' && vars.MODEL_REPO != ''
+    runs-on: ubuntu-latest
+    needs: [docker]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with the private model
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          docker build --secret id=hf_token,env=HF_TOKEN \
+            --build-arg MODEL_REPO=${{ vars.MODEL_REPO }} \
+            --build-arg MODEL_REVISION=${{ vars.MODEL_REVISION }} \
+            --build-arg MODEL_SHA256=${{ vars.MODEL_SHA256 }} \
+            -t privacy-guardian:real .
+      - name: Token is not in the image
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          ! docker history --no-trunc privacy-guardian:real | grep -qF "$HF_TOKEN"
+          ! docker save privacy-guardian:real | grep -aqF "$HF_TOKEN"
+      - name: Real model loads and cleans a document
+        run: |
+          docker run -d --name pg -p 8000:8000 \
+            -e ADMIN_EMAIL=ci@example.com -e ADMIN_PASSWORD=ci-password-123 \
+            privacy-guardian:real
+          bash scripts/smoke.sh http://localhost:8000 ci@example.com ci-password-123 \
+            || { docker logs pg; exit 1; }
           docker rm -f pg

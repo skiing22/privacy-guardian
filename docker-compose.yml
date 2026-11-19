@@ -1,16 +1,36 @@
 # Local run of the production image (ARCHITECTURE 16.3): one container, one data volume.
 # No database service: SQLite lives in the volume (D2).
+#
+# Model (API 8.2): put MODEL_REPO, MODEL_REVISION, MODEL_SHA256 in .env and the read-only
+# Hugging Face token in .secrets/hf_token (both git-ignored), then: docker compose build
+# Trying it without the weights: MODEL_SOURCE=fake docker compose build (random model;
+# .secrets/hf_token must still exist, it can be empty).
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        MODEL_SOURCE: ${MODEL_SOURCE:-hf}
+        MODEL_REPO: ${MODEL_REPO:-}
+        MODEL_REVISION: ${MODEL_REVISION:-}
+        MODEL_SHA256: ${MODEL_SHA256:-}
+      secrets:
+        - hf_token
     env_file:
       - path: .env
         required: false
     environment:
+      # Paths inside the image. They win over .env, which holds paths for local runs.
       DATA_DIR: /data
+      NER_MODEL_PATH: /app/model
+      STATIC_DIR: /app/static
     ports: ["8000:8000"]
     volumes:
       - app-data:/data
+
+secrets:
+  hf_token:
+    file: ./.secrets/hf_token
 
 volumes:
   app-data:

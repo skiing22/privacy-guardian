@@ -23,9 +23,19 @@ worker, retention) done (P2 to P10). Web app in progress: see
 ## Run with Docker
 ```bash
 cp .env.example .env          # optional in dev
+mkdir .secrets && echo hf_your_read_only_token > .secrets/hf_token   # never commit
+# set MODEL_REPO, MODEL_REVISION, MODEL_SHA256 in .env (docs/API.md 8.2), then:
 docker compose up --build
+# no access to the model yet? try the app with a random model:
+#   MODEL_SOURCE=fake docker compose up --build   (.secrets/hf_token may be empty)
 # open http://localhost:8000      health: http://localhost:8000/health
 ```
+
+**Model setup, once (P11.1):** create a private Hugging Face model repo, upload the
+`ner-distilbert-v1` folder (safetensors weights), note the commit hash, and run
+`python backend/scripts/model_fetch.py hash ml/models/ner-distilbert-v1` for `MODEL_SHA256`.
+For CI on `main`, add secret `HF_TOKEN` and variables `MODEL_REPO`, `MODEL_REVISION`,
+`MODEL_SHA256` in the repo settings.
 
 ## Develop without Docker
 Two terminals. Windows: use `.venv\Scripts\activate` instead of `source .venv/bin/activate`.
