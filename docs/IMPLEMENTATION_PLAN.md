@@ -235,9 +235,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 | Task | Detail |
 | --- | --- |
 | P11.1 👤 | Create a private Hugging Face model repo and upload `ner-distilbert-v1`; note the commit hash and SHA-256 (D16) |
-| P11.2 | Multi-stage Dockerfile: model stage (build secret `HF_TOKEN`, pinned revision, SHA-256 check, retries), runtime stage (CPU PyTorch, non-root, port, health check); frontend stage added in P12 |
-| P11.3 | Start script: backup → `alembic upgrade head` → app with one Uvicorn worker |
-| P11.4 | CI: build the image (without the real model, using a tiny fake model stage) and run the API tests against the container |
+| P11.2 ✅ | Multi-stage Dockerfile: model stage (build secret `HF_TOKEN`, pinned revision, SHA-256 check, retries), runtime stage (CPU PyTorch, non-root, port, health check); frontend stage added in P12 |
+| P11.3 ✅ | Done in the app instead of a script: startup backs up, migrates, then serves with one Uvicorn worker (ADR-0023) |
+| P11.4 ✅ | CI: build the image (without the real model, using a tiny fake model stage) and run the API tests against the container |
 
 - **Files:** `Dockerfile`, `docker/start.sh`, `docker-compose.yml`, `.github/workflows/ci.yml`, `ml/scripts/model_hash.py`
 - **Prerequisites:** P10

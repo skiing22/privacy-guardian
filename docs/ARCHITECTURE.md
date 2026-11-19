@@ -510,10 +510,10 @@ CI (required to merge): ruff, mypy, pytest with coverage ≥ 70%, layer-import c
 
 One multi-stage Dockerfile:
 1. **Frontend stage:** install with the lockfile, build static files.
-2. **Model stage:** fetch the NER weights (D16) and verify their SHA-256.
-3. **Runtime stage:** Python slim + CPU-only PyTorch + backend + static files + model. Runs as a non-root user. Exposes one port.
+2. **Model stage:** fetch the NER weights (D16) and verify their SHA-256 (`model-hf`), or build a tiny random model for CI (`model-fake`, chosen with `MODEL_SOURCE`).
+3. **Runtime stage:** Python slim + CPU-only PyTorch + backend + static files + model (root-owned, read-only to the app). Runs as a non-root user. Exposes one port. Hugging Face is switched off at runtime (`HF_HUB_OFFLINE=1`).
 
-Start command runs Alembic migrations, then the app with one Uvicorn worker (one process: the model and the scan queue are in memory).
+The app runs Alembic migrations at startup (with a backup first), then serves with one Uvicorn worker (one process: the model and the scan queue are in memory).
 
 ### 16.2 Runtime
 

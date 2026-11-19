@@ -24,3 +24,4 @@ data/tokens.json
 # local runtime data (DATA_DIR) and frontend build
 .data/
 frontend/dist/
+.secrets/
