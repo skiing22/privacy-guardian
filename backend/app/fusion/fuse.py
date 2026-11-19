@@ -40,7 +40,9 @@ _MASKED = re.compile(r"[Xx*]{2,}")
 _PIN = re.compile(r"\d{6}")
 _GAP = re.compile(r"[\s,.\-/]{0,3}")
 _SPACE = re.compile(r"\s{1,2}")
-_WEEKDAY_BEFORE = re.compile(r"\b(?:mon|tues|wednes|thurs|fri|satur|sun)day,?\s+$", re.IGNORECASE)
+_WEEKDAY_BEFORE = re.compile(
+    r"\b(?:mon|tues|wednes|thurs|fri|satur|sun)day,?[ \t]+$", re.IGNORECASE
+)
 _TRIM_CHARS = " \t\n,;:-"
 
 
@@ -169,7 +171,10 @@ def relabel(spans: list[Span]) -> list[Span]:
 
 def _can_merge(a: Span, b: Span, gap: str) -> PiiType | None:
     """Type of the merged span, or None if a and b must stay apart."""
-    if not _GAP.fullmatch(gap):
+    # Same rule as clean(): a value never spans lines. Parsers also join separate parts of
+    # a file (DOCX paragraphs and cells, CSV cells) with line breaks, so merging across one
+    # would fuse two people into one token and empty the second part in the output.
+    if not _GAP.fullmatch(gap) or "\n" in gap or "\r" in gap:
         return None
     ta, tb = a.pii_type, b.pii_type
     if ta is tb and ta in (PiiType.GOV_ID, PiiType.PERSON):

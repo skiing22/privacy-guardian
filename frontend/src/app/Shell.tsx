@@ -59,7 +59,7 @@ export function Shell() {
           )}
           <button
             type="button"
-            className="sm:hidden p-2.5 rounded-md hover:bg-desk"
+            className="sm:hidden p-3 rounded-md hover:bg-desk"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -94,7 +94,10 @@ export function Shell() {
         <Outlet />
       </main>
       <footer className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 py-6 border-t border-rule">
-        <NavLink to="/privacy" className="caption-2 text-sign hover:underline">
+        <NavLink
+          to="/privacy"
+          className="caption-2 text-sign hover:underline inline-block pointer-coarse:py-3"
+        >
           Privacy and terms
         </NavLink>
       </footer>

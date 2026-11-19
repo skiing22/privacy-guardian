@@ -118,7 +118,10 @@ export function Login() {
         <p className="caption-2 text-ink-muted">No account yet? Ask your admin to create one.</p>
       </main>
       <footer className="mt-auto pt-8">
-        <Link to="/privacy" className="caption-2 text-sign hover:underline">
+        <Link
+          to="/privacy"
+          className="caption-2 text-sign hover:underline inline-block pointer-coarse:py-3"
+        >
           Privacy and terms
         </Link>
       </footer>

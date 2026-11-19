@@ -16,7 +16,7 @@ PASTED_NAME = "pasted-text.txt"
 class UploadRejectedError(ValueError):
     def __init__(self, code: str) -> None:
         super().__init__(code)
-        self.code = code  # unsupported_type | empty_input | file_unreadable
+        self.code = code  # unsupported_type | empty_input | file_unreadable | text_too_long
 
 
 def clean_filename(name: str) -> str:
@@ -81,5 +81,5 @@ def check_text(text: str) -> bytes:
     if not t:
         raise UploadRejectedError("empty_input")
     if len(t) > MAX_TEXT_CHARS:
-        raise UploadRejectedError("file_unreadable")
+        raise UploadRejectedError("text_too_long")
     return t.encode()

@@ -20,6 +20,7 @@ from app.output.labels import (
 )
 from app.output.segments import Item, rebuild
 from app.parsers.validate import (
+    MAX_TEXT_CHARS,
     PASTED_NAME,
     UploadRejectedError,
     check_text,
@@ -98,6 +99,9 @@ class ScanService:
             else:
                 name, fmt, data = PASTED_NAME, "txt", check_text(text or "")
         except UploadRejectedError as e:
+            if e.code == "text_too_long":
+                msg = f"Text is too long (max {MAX_TEXT_CHARS:,} characters)."
+                raise AppError("invalid_request", msg, "text") from e
             raise AppError(e.code, mb=self.c.settings.max_upload_mb) from e
         if self.repo.open_count() >= MAX_OPEN:
             raise AppError("rate_limited", headers={"Retry-After": "30"}, n=30)

@@ -10,7 +10,10 @@ export function Forbidden() {
       <p className="body-3 text-ink-muted mt-2 max-w-[65ch]">
         Ask an admin if you need access to rules or the audit log.
       </p>
-      <Link to="/scans" className="body-3 text-sign hover:underline mt-4 inline-block">
+      <Link
+        to="/scans"
+        className="body-3 text-sign hover:underline mt-4 inline-block pointer-coarse:py-2.5"
+      >
         Go to your scans
       </Link>
     </section>

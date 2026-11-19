@@ -15,7 +15,7 @@ from langgraph.types import Command
 
 from app.graph.build import build_graph, result_of
 from app.output.segments import Item, OutputError, rebuild
-from app.output.writers import write
+from app.output.writers import CONTENT_TYPES, write
 from app.parsers.base import ParsedDoc, ParseError
 from app.parsers.files import parse_bytes
 from app.policy.utility import PolicyConfig
@@ -59,8 +59,6 @@ def parse_original(c: Container, row: ScanRow) -> tuple[bytes, ParsedDoc]:
     except ParseError as e:
         code = "pdf_no_text" if "no text layer" in str(e) else "file_unreadable"
         raise ScanFailedError(code, 1) from e
-    if not doc.text.strip():
-        raise ScanFailedError("file_unreadable", 1)
     return data, doc
 
 
@@ -82,6 +80,9 @@ class ScanRunner:
         try:
             original, doc = parse_original(self.c, row)
             step = 2
+            if not doc.text.strip():  # e.g. a CSV with only a header: nothing to find
+                self._finish_empty(row, original)
+                return
             self._run_graph(row, job, original, doc)
         except ScanFailedError as e:
             self._fail(row.id, e.code, e.step)
@@ -143,6 +144,23 @@ class ScanRunner:
             log.info("scan needs review", extra={"scan_id": row.id, "event": "needs_review"})
             return
         self._finish(row, original, doc, dict(snap.values))
+
+    def _finish_empty(self, row: ScanRow, original: bytes) -> None:
+        """PRD 12: "No personal data found." The cleaned file is the original."""
+        stored = self.c.files.write(row.id, "cleaned", original)
+        now = self._now()
+        crypto = self.c.crypto_for(f"user:{row.owner_id}")
+        fmt = "txt" if row.format == "pdf" else row.format
+        with self.c.db.transaction():
+            self.repo.replace_decisions(row.id, [])
+            self.repo.put_file(row.id, "cleaned", CONTENT_TYPES.get(fmt, CONTENT_TYPES["txt"]),
+                               stored.size_bytes, stored.key_id, stored.nonce, now)  # fmt: skip
+            self.repo.finish(row.id, "LOW", 0.0, [], 0, 1, self.c.model_version, now)
+            crypto.audit.append(crypto.actor, "scan_completed", {
+                "scan": row.id, "rounds": 1, "risk": "LOW", "unresolved_leaks": 0, "counts": {},
+            })  # fmt: skip
+        self.c.saver.delete_thread(row.id)
+        log.info("scan done", extra={"scan_id": row.id, "event": "scan_done", "count": 0})
 
     def _finish(
         self, row: ScanRow, original: bytes, doc: ParsedDoc, values: dict[str, Any]
