@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from 'react'
+import { forwardRef, type ButtonHTMLAttributes } from 'react'
 
 // DESIGN 5.1: one button family. Loading swaps the label for the action in progress and
 // disables the button. No spinners, no arrows.
@@ -11,8 +11,10 @@ const BASE =
 
 const VARIANTS: Record<Variant, string> = {
   primary: 'h-10 pointer-coarse:min-h-11 px-3 bg-sign text-white hover:bg-sign-hover',
+  // aria-pressed: a chosen answer (DESIGN 2.1: sign-soft fill, sign text).
   secondary:
-    'h-10 pointer-coarse:min-h-11 px-3 bg-paper text-ink border border-rule-strong hover:bg-desk',
+    'h-10 pointer-coarse:min-h-11 px-3 bg-paper text-ink border border-rule-strong hover:bg-desk ' +
+    'aria-pressed:bg-sign-soft aria-pressed:border-sign aria-pressed:text-sign',
   text: 'px-1 text-sign underline decoration-transparent underline-offset-4 hover:decoration-sign',
   // Text size, danger colour: a destructive action inside a table row (still asks first).
   'text-danger':
@@ -27,18 +29,22 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   loadingLabel?: string | undefined
 }
 
-export function Button({
-  variant = 'primary',
-  loading = false,
-  loadingLabel,
-  disabled,
-  children,
-  className = '',
-  type = 'button',
-  ...rest
-}: Props) {
+export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
+  {
+    variant = 'primary',
+    loading = false,
+    loadingLabel,
+    disabled,
+    children,
+    className = '',
+    type = 'button',
+    ...rest
+  },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
@@ -48,4 +54,4 @@ export function Button({
       {loading && loadingLabel ? loadingLabel : children}
     </button>
   )
-}
+})

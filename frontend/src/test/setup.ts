@@ -4,5 +4,10 @@ import { afterEach, vi } from 'vitest'
 // Testing Library only cleans up by itself when Vitest globals are on; they are off here.
 afterEach(() => {
   cleanup()
+  try {
+    sessionStorage.clear()
+  } catch {
+    /* no storage */
+  }
   vi.unstubAllGlobals()
 })
