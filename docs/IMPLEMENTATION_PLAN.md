@@ -254,11 +254,11 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P12.1 | Vite + React + TypeScript strict, ESLint, Vitest; folders per ARCHITECTURE 4.1 |
-| P12.2 | Tailwind theme from DESIGN.md tokens (colours, type styles, spacing, radius); Manrope + Geist Mono via Fontsource; Phosphor |
-| P12.3 | OpenAPI → TypeScript generation script; typed client; error-body mapping; TanStack Query setup (retry rules from ARCHITECTURE 13.1) |
+| P12.1 ✅ | Vite + React + TypeScript strict, ESLint, Vitest; folders per ARCHITECTURE 4.1 |
+| P12.2 ✅ | Tailwind theme from DESIGN.md tokens (colours, type styles, spacing, radius); Manrope + Geist Mono via Fontsource; Phosphor |
+| P12.3 ✅ | OpenAPI → TypeScript generation script; typed client; error-body mapping; TanStack Query setup (retry rules from ARCHITECTURE 13.1) |
 | P12.4 ✅ | Router with all routes; auth guard (`/auth/me`, redirect with `next`); app shell: floating nav, mobile menu, footer, skip link |
-| P12.5 | Serve the build from FastAPI (SPA fallback for client routes); add the frontend stage to the Dockerfile; CI frontend job |
+| P12.5 ✅ | Serve the build from FastAPI (SPA fallback for client routes); add the frontend stage to the Dockerfile; CI frontend job |
 
 - **Files:** `frontend/*`, `backend/app/main.py` (static mount), `Dockerfile`, `ci.yml`
 - **Prerequisites:** P5 (auth endpoints), P8 schema stable
@@ -271,9 +271,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P13.1 | Button (4 variants, hover/press/focus/disabled/loading), Field (label, help, error), TextArea |
-| P13.2 | Badge, TypeLabel, Banner, Toast, Dialog (focus trap), Skeleton, EmptyState |
-| P13.3 | Table (stacks on phones), SegmentedControl, FileDrop |
+| P13.1 ✅ | Button (4 variants, hover/press/focus/disabled/loading), Field (label, help, error), TextArea |
+| P13.2 ✅ | Badge, TypeLabel, Banner, Toast, Dialog (focus trap), Skeleton, EmptyState |
+| P13.3 🟡 | Table (stacks on phones) ✅, FileDrop ✅, SegmentedControl (with S4, P16) |
 
 - **Files:** `frontend/src/ui/*`, `frontend/src/styles/*`
 - **Prerequisites:** P12
@@ -287,8 +287,8 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 | Task | Detail |
 | --- | --- |
 | P14.1 ✅ | S1 Login (shared error, rate-limit message) |
-| P14.2 | S2 Scans: needs-review query + newest query, table, empty state, delete with dialog |
-| P14.3 | S3 New scan: FileDrop or paste, client-side size/type pre-check, Start scan → S4 |
+| P14.2 ✅ | S2 Scans: needs-review query + newest query, table, empty state, delete with dialog |
+| P14.3 ✅ | S3 New scan: FileDrop or paste, client-side size/type pre-check, Start scan → S4 |
 
 - **Files:** `frontend/src/pages/{Login,Scans,NewScan}.tsx`, `features/scan/*`, `api/` hooks
 - **Prerequisites:** P13
@@ -301,9 +301,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P15.1 | Polling hook (1 s, 5 s hidden, stop on final states); progress steps with round label and "Preparing the model" |
-| P15.2 | Sheet with marks for review context; review card; answers with `1 2 3`, `↑ ↓`, undo (`Z`, 5 s); Submit answers |
-| P15.3 | Failed state with Retry; session-expired keeps unsent answers |
+| P15.1 ✅ | Polling hook (1 s, 5 s hidden, stop on final states); progress steps with round label and "Preparing the model" |
+| P15.2 ✅ | Sheet with marks for review context; review card; answers with `1 2 3`, `↑ ↓`, undo (`Z`, 5 s); Submit answers |
+| P15.3 ✅ | Failed state with Retry; session-expired keeps unsent answers |
 
 - **Files:** `frontend/src/pages/Scan.tsx`, `features/scan/{Progress,Sheet,Mark}.tsx`, `features/review/*`
 - **Prerequisites:** P14
