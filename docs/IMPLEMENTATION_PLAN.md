@@ -257,7 +257,7 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 | P12.1 | Vite + React + TypeScript strict, ESLint, Vitest; folders per ARCHITECTURE 4.1 |
 | P12.2 | Tailwind theme from DESIGN.md tokens (colours, type styles, spacing, radius); Manrope + Geist Mono via Fontsource; Phosphor |
 | P12.3 | OpenAPI → TypeScript generation script; typed client; error-body mapping; TanStack Query setup (retry rules from ARCHITECTURE 13.1) |
-| P12.4 | Router with all routes; auth guard (`/auth/me`, redirect with `next`); app shell: floating nav, mobile menu, footer, skip link |
+| P12.4 ✅ | Router with all routes; auth guard (`/auth/me`, redirect with `next`); app shell: floating nav, mobile menu, footer, skip link |
 | P12.5 | Serve the build from FastAPI (SPA fallback for client routes); add the frontend stage to the Dockerfile; CI frontend job |
 
 - **Files:** `frontend/*`, `backend/app/main.py` (static mount), `Dockerfile`, `ci.yml`
@@ -286,7 +286,7 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P14.1 | S1 Login (shared error, rate-limit message) |
+| P14.1 ✅ | S1 Login (shared error, rate-limit message) |
 | P14.2 | S2 Scans: needs-review query + newest query, table, empty state, delete with dialog |
 | P14.3 | S3 New scan: FileDrop or paste, client-side size/type pre-check, Start scan → S4 |
 

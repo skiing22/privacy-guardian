@@ -299,8 +299,12 @@ The full data model (10 tables, types, keys, constraints, indexes, retention, ba
 | Lifetime | Expires after 8 hours idle or 7 days total; logout deletes the row |
 | Login protection | Same message for unknown email and wrong password; 5 failed tries per email+IP per 5 minutes, then wait 1 minute (in-memory counter, fine for one process) |
 | Cross-site requests | `SameSite=Strict` + the API rejects state-changing requests whose `Origin` header is not the app's own |
-| First admin | Created by `python -m app.cli create-user --role admin` (or from `ADMIN_EMAIL` / `ADMIN_PASSWORD` once at first start, if no users exist) |
-| Not in MVP | Sign-up page, password reset, email, SSO (PRD 14) |
+| First admin | Created by `python -m app.manage create-user EMAIL --role admin` (password asked, never on the command line), or from `ADMIN_EMAIL` / `ADMIN_PASSWORD` once at first start if no users exist |
+| New login | Gets a new session id every time; a session cookie the browser already sent is ended, so logging in again never leaves an old session alive |
+| Dead cookie | A 401 for a cookie that no longer works also clears that cookie |
+| Logout | Idempotent: `204` even without a session, so a stale tab can always log out |
+| Browser side | The app never sees the session (HttpOnly). Route guards only decide what to show; the server checks every request. A 401 anywhere drops all cached data and returns to `/login?next=…` (only paths inside the app are accepted as `next`) |
+| Not in MVP | Sign-up page, password reset, email, SSO (PRD 14). Users are created by an admin with `app.manage` |
 
 ### 8.2 Authorization
 
@@ -312,6 +316,8 @@ Checked in API dependencies **and** again in services for anything sensitive.
 | A user can only read, review, download or delete **their own** scans; anything else returns 404 (not 403, so ids cannot be probed) | Service query filters by owner |
 | `/api/v1/admin/*` needs role `admin` | API dependency |
 | Reveal checks role and reason again and logs refusals | Domain (`Vault.reidentify`) |
+| Every admin service method checks the role again | `AdminService` (a routing mistake cannot open an admin action) |
+| A test discovers every API route and checks it for anonymous, user and admin callers | `tests/test_authz.py` |
 | Admins do not see other users' documents (PRD 9) | No admin route returns document text |
 
 ---
@@ -428,7 +434,7 @@ Key rules (ADR-0020): four different keys, each at least 32 bytes, rotated by ap
 
 ### 13.2 Error codes (MVP)
 
-`file_too_large`, `unsupported_type`, `pdf_no_text`, `file_unreadable`, `empty_input`, `not_found`, `not_waiting_for_review`, `invalid_answers`, `scan_not_done`, `auth_failed`, `too_many_attempts`, `session_expired`, `forbidden`, `reason_too_short`, `unknown_token`, `vault_integrity`, `model_not_ready`, `internal`.
+`file_too_large`, `unsupported_type`, `pdf_no_text`, `file_unreadable`, `empty_input`, `not_found`, `not_waiting_for_review`, `invalid_answers`, `scan_not_done`, `auth_failed`, `rate_limited`, `session_expired`, `forbidden`, `reason_too_short`, `unknown_token`, `vault_integrity`, `model_not_ready`, `internal`.
 
 ### 13.3 Logging
 

@@ -1,26 +1,27 @@
-import { render, screen } from '@testing-library/react'
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
-import { routes } from './routes'
+import { screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { fakeApi, renderAt, USER } from '../test/server'
 
-function at(path: string) {
-  render(<RouterProvider router={createMemoryRouter(routes, { initialEntries: [path] })} />)
-}
+afterEach(() => vi.unstubAllGlobals())
 
 describe('routes', () => {
   it('redirects / to scans and marks the current nav link', async () => {
-    at('/')
+    fakeApi({ 'GET /api/v1/auth/me': { status: 200, body: USER } })
+    renderAt('/')
     expect(await screen.findByRole('heading', { name: 'Scans' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Scans' }).getAttribute('aria-current')).toBe('page')
   })
 
-  it('shows the 404 page for unknown paths', () => {
-    at('/nope')
-    expect(screen.getByRole('heading', { name: 'This page does not exist.' })).toBeTruthy()
+  it('shows the 404 page for unknown paths', async () => {
+    fakeApi({ 'GET /api/v1/auth/me': { status: 200, body: USER } })
+    renderAt('/nope')
+    expect(await screen.findByRole('heading', { name: 'This page does not exist.' })).toBeTruthy()
   })
 
-  it('puts the skip link first', () => {
-    at('/scans')
+  it('puts the skip link first', async () => {
+    fakeApi({ 'GET /api/v1/auth/me': { status: 200, body: USER } })
+    renderAt('/scans')
+    await screen.findByRole('heading', { name: 'Scans' })
     expect(screen.getAllByRole('link')[0]?.textContent).toBe('Skip to content')
   })
 })

@@ -250,3 +250,9 @@ class ErrorBody(BaseModel):
 
 class ErrorOut(BaseModel):
     error: ErrorBody
+
+
+# Fixed descriptions: FastAPI otherwise uses Python's HTTP status phrases, which changed
+# between Python versions ("Unprocessable Entity" -> "Unprocessable Content") and would
+# make the generated frontend types differ by Python version.
+ERR: dict[str, Any] = {"model": ErrorOut, "description": "Error (see error.code)"}

@@ -7,10 +7,10 @@ from fastapi import APIRouter, Query
 
 from app.api.deps import Admin, Box, User
 from app.api.schemas import (
+    ERR,
     AnchorOut,
     AuditPage,
     ConfirmIn,
-    ErrorOut,
     RevealIn,
     RevealOut,
     RulesIn,
@@ -22,7 +22,7 @@ from app.services.admin import AdminService
 router = APIRouter(
     prefix="/admin",
     tags=["admin"],
-    responses={401: {"model": ErrorOut}, 403: {"model": ErrorOut}, 422: {"model": ErrorOut}},
+    responses={401: ERR, 403: ERR, 422: ERR},
 )
 
 
@@ -37,7 +37,7 @@ def put_rules(body: RulesIn, admin: Admin, c: Box) -> RulesOut:
     return RulesOut.model_validate(AdminService(c, admin).put_rules(rules))
 
 
-@router.post("/reveal", responses={404: {"model": ErrorOut}, 429: {"model": ErrorOut}})
+@router.post("/reveal", responses={404: ERR, 429: ERR})
 def reveal(body: RevealIn, user: User, c: Box) -> RevealOut:
     return RevealOut.model_validate(AdminService(c, user).reveal(body.token, body.reason))
 

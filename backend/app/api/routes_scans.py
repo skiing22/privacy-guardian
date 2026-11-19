@@ -6,8 +6,8 @@ from fastapi import APIRouter, File, Form, Query, Request, Response, UploadFile
 
 from app.api.deps import GENERAL_LIMIT, Box, User, UserNoLimit
 from app.api.schemas import (
+    ERR,
     AnswersIn,
-    ErrorOut,
     ScanAccepted,
     ScanList,
     ScanResult,
@@ -20,7 +20,7 @@ from app.services.scans import ScanService
 router = APIRouter(
     prefix="/scans",
     tags=["scans"],
-    responses={401: {"model": ErrorOut}, 404: {"model": ErrorOut}, 422: {"model": ErrorOut}},
+    responses={401: ERR, 404: ERR, 422: ERR},
 )
 CHUNK = 1024 * 1024
 
@@ -35,8 +35,8 @@ def _read_limited(f: UploadFile, limit: int, mb: int) -> bytes:
     return bytes(out)
 
 
-@router.post("", status_code=202, responses={413: {"model": ErrorOut}, 415: {"model": ErrorOut},
-                                              429: {"model": ErrorOut}})  # fmt: skip
+@router.post("", status_code=202, responses={413: ERR, 415: ERR,
+                                              429: ERR})  # fmt: skip
 def create_scan(
     user: User,
     c: Box,
@@ -69,14 +69,14 @@ def get_scan(scan_id: str, request: Request, user: UserNoLimit, c: Box) -> ScanS
     return ScanStatusOut.model_validate(svc.status(scan_id))
 
 
-@router.post("/{scan_id}/answers", status_code=202, responses={409: {"model": ErrorOut}})
+@router.post("/{scan_id}/answers", status_code=202, responses={409: ERR})
 def answer(scan_id: str, body: AnswersIn, user: User, c: Box) -> ScanAccepted:
     answers = [a.model_dump(mode="json") for a in body.answers]
     s = ScanService(c, user).answer(scan_id, answers)
     return ScanAccepted(id=s.id, status=s.status)
 
 
-@router.get("/{scan_id}/result", responses={409: {"model": ErrorOut}})
+@router.get("/{scan_id}/result", responses={409: ERR})
 def result(scan_id: str, user: User, c: Box) -> ScanResult:
     return ScanResult.model_validate(ScanService(c, user).result(scan_id))
 
@@ -84,7 +84,10 @@ def result(scan_id: str, user: User, c: Box) -> ScanResult:
 @router.get(
     "/{scan_id}/download",
     response_class=Response,
-    responses={200: {"content": {"application/octet-stream": {}}}, 409: {"model": ErrorOut}},
+    responses={
+        200: {"content": {"application/octet-stream": {}}, "description": "The file"},
+        409: ERR,
+    },
 )
 def download(
     scan_id: str, user: User, c: Box, kind: Literal["cleaned", "report"] = "cleaned"
@@ -97,12 +100,12 @@ def download(
     )
 
 
-@router.post("/{scan_id}/retry", status_code=202, responses={409: {"model": ErrorOut}})
+@router.post("/{scan_id}/retry", status_code=202, responses={409: ERR})
 def retry(scan_id: str, user: User, c: Box) -> ScanAccepted:
     s = ScanService(c, user).retry(scan_id)
     return ScanAccepted(id=s.id, status=s.status)
 
 
-@router.delete("/{scan_id}", status_code=204, responses={409: {"model": ErrorOut}})
+@router.delete("/{scan_id}", status_code=204, responses={409: ERR})
 def delete(scan_id: str, user: User, c: Box) -> None:
     ScanService(c, user).delete(scan_id)

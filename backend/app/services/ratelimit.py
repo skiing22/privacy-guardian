@@ -9,6 +9,8 @@ from collections.abc import Callable
 
 from app.services.errors import AppError
 
+MAX_KEYS = 50_000  # memory bound: many fake emails or IPs cannot grow the dict forever
+
 
 class RateLimiter:
     def __init__(self, clock: Callable[[], float] = time.monotonic) -> None:
@@ -16,12 +18,31 @@ class RateLimiter:
         self._hits: dict[str, deque[float]] = {}
         self._lock = threading.Lock()
 
+    def _queue(self, key: str) -> deque[float]:
+        q = self._hits.get(key)
+        if q is None:
+            if len(self._hits) >= MAX_KEYS:
+                self._prune()
+            q = self._hits[key] = deque()
+        return q
+
     def _window(self, key: str, period: float) -> deque[float]:
-        q = self._hits.setdefault(key, deque())
+        q = self._queue(key)
         cutoff = self.clock() - period
         while q and q[0] <= cutoff:
             q.popleft()
         return q
+
+    def _prune(self) -> None:
+        """Drop keys idle for an hour (our longest window), so they hold nothing that
+        still counts."""
+        cutoff = self.clock() - 3600.0
+        for k in [k for k, q in self._hits.items() if not q or q[-1] <= cutoff]:
+            del self._hits[k]
+        if len(self._hits) >= MAX_KEYS:  # still full: drop the oldest half
+            oldest = sorted(self._hits, key=lambda k: self._hits[k][-1] if self._hits[k] else 0)
+            for k in oldest[: MAX_KEYS // 2]:
+                del self._hits[k]
 
     def retry_after(self, key: str, limit: int, period: float) -> int:
         """Seconds until one more hit is allowed (0 = allowed now). Does not count a hit."""
@@ -42,7 +63,7 @@ class RateLimiter:
 
     def add(self, key: str) -> None:
         with self._lock:
-            self._hits.setdefault(key, deque()).append(self.clock())
+            self._queue(key).append(self.clock())
 
     def clear(self, key: str) -> None:
         with self._lock:
