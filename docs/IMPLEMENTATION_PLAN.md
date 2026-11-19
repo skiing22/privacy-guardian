@@ -273,7 +273,7 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 | --- | --- |
 | P13.1 ✅ | Button (4 variants, hover/press/focus/disabled/loading), Field (label, help, error), TextArea |
 | P13.2 ✅ | Badge, TypeLabel, Banner, Toast, Dialog (focus trap), Skeleton, EmptyState |
-| P13.3 🟡 | Table (stacks on phones) ✅, FileDrop ✅, SegmentedControl (with S4, P16) |
+| P13.3 ✅ | Table (stacks on phones), SegmentedControl, FileDrop |
 
 - **Files:** `frontend/src/ui/*`, `frontend/src/styles/*`
 - **Prerequisites:** P12
@@ -301,9 +301,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P15.1 | Polling hook (1 s, 5 s hidden, stop on final states); progress steps with round label and "Preparing the model" |
-| P15.2 | Sheet with marks for review context; review card; answers with `1 2 3`, `↑ ↓`, undo (`Z`, 5 s); Submit answers |
-| P15.3 | Failed state with Retry; session-expired keeps unsent answers |
+| P15.1 ✅ | Polling hook (1 s, 5 s hidden, stop on final states); progress steps with round label and "Preparing the model" |
+| P15.2 ✅ | Sheet with marks for review context; review card; answers with `1 2 3`, `↑ ↓`, undo (`Z`, 5 s); Submit answers |
+| P15.3 ✅ | Failed state with Retry; session-expired keeps unsent answers |
 
 - **Files:** `frontend/src/pages/Scan.tsx`, `features/scan/{Progress,Sheet,Mark}.tsx`, `features/review/*`
 - **Prerequisites:** P14
@@ -316,15 +316,16 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P16.1 | Original view: marks from `items` offsets; hover/focus type label; select ↔ panel row |
-| P16.2 | Cleaned view from `cleaned_segments`; token hover outlines all occurrences; Compare view (desktop) |
-| P16.3 | Risk banner (4 levels, plain sentence, clues), item list with reasons, unresolved-leaks message |
-| P16.4 | Redaction pass (once per scan, reduced-motion instant); downloads (PDF → `.txt` label) |
+| P16.1 ✅ | Original view: marks from `items` offsets; hover/focus type label; select ↔ panel row |
+| P16.2 ✅ | Cleaned view from `cleaned_segments`; token hover outlines all occurrences; Compare view (desktop) |
+| P16.3 ✅ | Risk banner (4 levels, plain sentence, clues), item list with reasons, unresolved-leaks message |
+| P16.4 ✅ | Redaction pass (once per scan, reduced-motion instant); downloads (PDF → `.txt` label) |
 
 - **Files:** `features/scan/{CleanedSheet,ItemList,RiskBanner,Downloads}.tsx`
 - **Prerequisites:** P15
 - **Tests:** marks render exactly at offsets (property test with random items); segments render the cleaned text exactly; redaction pass skipped under reduced motion; Playwright J1
 - **Done when:** S4 matches DESIGN 12 at 390, 768, 1024 and 1440 px
+- **As built:** below 1024 px the item list sits under the sheet instead of the three tabs in DESIGN 10 (Review and Risk already have their own places on the page); Compare only from 1024 px
 
 ### P17. Admin screens (S5, S6)
 

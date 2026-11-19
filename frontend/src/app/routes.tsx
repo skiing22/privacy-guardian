@@ -4,6 +4,7 @@ import { Login } from '../pages/Login'
 import { NewScan } from '../pages/NewScan'
 import { NotFound } from '../pages/NotFound'
 import { Placeholder } from '../pages/Placeholder'
+import { Scan } from '../pages/Scan'
 import { Scans } from '../pages/Scans'
 import { Shell } from './Shell'
 
@@ -21,7 +22,7 @@ export const routes: RouteObject[] = [
           { index: true, element: <Navigate to="/scans" replace /> },
           { path: 'scans', element: <Scans /> },
           { path: 'scans/new', element: <NewScan /> },
-          { path: 'scans/:id', element: <Placeholder title="Scan" phase="P15" /> },
+          { path: 'scans/:id', element: <Scan /> },
           {
             path: 'admin',
             element: <RequireAdmin />,
