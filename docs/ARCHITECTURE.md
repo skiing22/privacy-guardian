@@ -492,12 +492,13 @@ Key rules (ADR-0020): four different keys, each at least 32 bytes, rotated by ap
 | Unit | Validators, fusion, linking, risk, beliefs, policy, crypto, parsers, chunking (incl. property tests) | pytest, Hypothesis | ✅ 125 tests, 96% |
 | Graph | Parallel fan-out, review interrupt and resume, verifier loop, crypto in graph | pytest, fake NER | ✅ |
 | Real-run regressions | Bugs found by running the real model, each with a test | pytest | ✅ |
-| Storage | SQL stores pass the **same** tests as the in-memory stores; audit triggers block edits; migrations upgrade an empty DB | pytest, temp SQLite | ⬜ |
-| API | Every endpoint: happy path, error codes, **authorization matrix** (user vs admin vs other user), upload limits, zip bomb | httpx TestClient | ⬜ |
-| Privacy | Full scan through the API; captured logs and audit payloads contain no sample value | pytest | ⬜ |
-| Restart | Pause at review, rebuild the app (new process objects), answer, scan completes | pytest | 🟡 (in-memory version ✅) |
-| Frontend logic | Mark rendering from offsets, keyboard handler, error mapping | Vitest | ⬜ |
-| End to end | J1 clean a document, J2 review, J4 tamper-and-verify, in a real browser against the real container (fake model) | Playwright | ⬜ |
+| Storage | SQL stores pass the **same** tests as the in-memory stores; audit triggers block edits; migrations upgrade an empty DB | pytest, temp SQLite | ✅ |
+| API | Every endpoint: happy path, error codes, **authorization matrix** (user vs admin vs other user), upload limits, zip bomb | httpx TestClient | ✅ |
+| Failures and edges | Locked database (503 busy), disk full, model crash + retry, empty files, Windows line endings, emoji offsets, merged DOCX cells, filename tricks; property tests for fusion and output rebuild | pytest, Hypothesis | ✅ (QA report 2026-11-20) |
+| Privacy | Full scan through the API; captured logs and audit payloads contain no sample value | pytest | ✅ |
+| Restart | Pause at review, rebuild the app (new process objects), answer, scan completes | pytest | ✅ |
+| Frontend logic | Mark rendering from offsets, keyboard handler, error mapping | Vitest | 🟡 auth, guards, error mapping ✅; screens come with P14–P17 |
+| End to end | J1 clean a document, J2 review, J4 tamper-and-verify, in a real browser against the real container (fake model) | Playwright | 🟡 container smoke scan in CI ✅ (`scripts/smoke.sh`); browser journeys with the screens (P18.4) |
 | Accuracy | Gold set v1 (cached NER) on every run; held-out v2 before any claim | eval script | ✅ / ⬜ |
 
 CI (required to merge): ruff, mypy, pytest with coverage ≥ 70%, layer-import check, Alembic upgrade, frontend type check + lint + Vitest + build, Docker build. Playwright runs on `main` and before tags.

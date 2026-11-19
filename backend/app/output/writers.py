@@ -37,12 +37,18 @@ def _write_lines(original: bytes, doc: ParsedDoc, parts: list[str]) -> bytes:
     for k, seg in enumerate(doc.segments):
         n = int(seg.loc.removeprefix("line "))
         lines[n - 1] = parts[k]
-    end = "\n" if text.endswith(("\n", "\r")) else ""
-    return ("\n".join(lines) + end).encode()
+    nl = _newline(text)  # keep Windows line endings for Windows files
+    end = nl if text.endswith(("\n", "\r")) else ""
+    return (nl.join(lines) + end).encode()
+
+
+def _newline(text: str) -> str:
+    return "\r\n" if "\r\n" in text else "\n"
 
 
 def _write_csv(original: bytes, parts: list[str]) -> bytes:
-    rows = list(csv.reader(io.StringIO(decode_text(original))))
+    source = decode_text(original)
+    rows = list(csv.reader(io.StringIO(source)))
     header = rows[0]
     k = 0
     for row in rows[1:]:
@@ -57,7 +63,7 @@ def _write_csv(original: bytes, parts: list[str]) -> bytes:
     if k != len(parts):
         raise OutputError("CSV cells do not match the parsed parts")
     buf = io.StringIO()
-    csv.writer(buf).writerows(rows)
+    csv.writer(buf, lineterminator=_newline(source)).writerows(rows)
     return buf.getvalue().encode()
 
 

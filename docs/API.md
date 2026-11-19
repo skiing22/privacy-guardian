@@ -325,6 +325,7 @@ Everything S4 needs to draw the original and cleaned sheets and the item list. B
 }
 ```
 - `items[*].start/end` refer to `original_text` for round 1. Items found in later rounds are shown in `cleaned_segments` only (they never existed in the original).
+- **Offsets count Unicode code points** (Python string indices), not UTF-16 units. In JavaScript an emoji or other character outside the basic plane is 2 units long, so `text.slice(start, end)` would mark the wrong letters. The frontend slices with `Array.from(text)` (code points). Tested with emoji in `tests/test_qa_edges.py`.
 - `output` is the exact replacement text (token, mask, generalized value or `[REDACTED]`), so the frontend never re-implements masking.
 - `cleaned_segments` joined together equal the cleaned text exactly; the frontend renders marks from `item_idx`.
 - Errors: `409 scan_not_done`, `404 not_found`.
