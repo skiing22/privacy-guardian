@@ -1,9 +1,16 @@
 import { List, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
+import { useSession } from '../features/auth/session'
+import { UserMenu } from '../features/auth/UserMenu'
 
-// DESIGN 6. Admin links appear once roles exist (P5/P17); hiding links is never protection.
-const LINKS = [{ to: '/scans', label: 'Scans' }]
+// DESIGN 6. Admin links show only for admins. Hiding a link protects nothing: the
+// server refuses admin routes to everyone else (ARCHITECTURE 8.2).
+const USER_LINKS = [{ to: '/scans', label: 'Scans' }]
+const ADMIN_LINKS = [
+  { to: '/admin/rules', label: 'Rules & vault' },
+  { to: '/admin/audit', label: 'Audit log' },
+]
 
 function linkClass({ isActive }: { isActive: boolean }): string {
   return [
@@ -16,6 +23,8 @@ function linkClass({ isActive }: { isActive: boolean }): string {
 
 export function Shell() {
   const [open, setOpen] = useState(false)
+  const user = useSession().data?.user ?? null
+  const LINKS = !user ? [] : user.role === 'admin' ? [...USER_LINKS, ...ADMIN_LINKS] : USER_LINKS
   return (
     <div className="min-h-dvh flex flex-col">
       <a
@@ -39,6 +48,15 @@ export function Shell() {
               </li>
             ))}
           </ul>
+          {user ? (
+            <span className="hidden sm:block ml-2">
+              <UserMenu user={user} />
+            </span>
+          ) : (
+            <NavLink to="/login" className={linkClass}>
+              Log in
+            </NavLink>
+          )}
           <button
             type="button"
             className="sm:hidden p-2.5 rounded-md hover:bg-desk"
@@ -65,6 +83,11 @@ export function Shell() {
               </li>
             ))}
           </ul>
+          {user && (
+            <div className="mt-6">
+              <UserMenu user={user} />
+            </div>
+          )}
         </div>
       )}
       <main id="main" className="flex-1 w-full max-w-[1280px] mx-auto px-4 sm:px-6 pt-12 pb-16">

@@ -3,14 +3,14 @@
 from fastapi import APIRouter, Request, Response
 
 from app.api.deps import COOKIE, Box, User, client_ip
-from app.api.schemas import ErrorOut, LoginIn, Me
+from app.api.schemas import ERR, LoginIn, Me
 
-router = APIRouter(prefix="/auth", tags=["auth"], responses={401: {"model": ErrorOut}})
+router = APIRouter(prefix="/auth", tags=["auth"], responses={401: ERR})
 
 
-@router.post("/login", status_code=204, responses={429: {"model": ErrorOut}})
+@router.post("/login", status_code=204, responses={429: ERR})
 def login(body: LoginIn, request: Request, response: Response, c: Box) -> None:
-    s = c.auth.login(body.email, body.password, client_ip(request))
+    s = c.auth.login(body.email, body.password, client_ip(request), request.cookies.get(COOKIE))
     request.state.user_id = s.user.id
     response.set_cookie(
         COOKIE, s.token, max_age=c.settings.session_max_days * 86400, path="/",

@@ -26,7 +26,14 @@ class AdminService:
         self.c, self.user = c, user
         self.rules = RuleRepo(c.db)
 
+    def _admin(self) -> None:
+        """Second check behind the router's (ARCHITECTURE 8.2): a routing mistake must
+        not open an admin action to a normal user."""
+        if self.user.role != "admin" or not self.user.is_active:
+            raise AppError("forbidden")
+
     def get_rules(self) -> dict[str, Any]:
+        self._admin()
         fixed = self.rules.all()
         return {
             "rules": [
@@ -42,6 +49,7 @@ class AdminService:
         }
 
     def put_rules(self, rules: list[tuple[PiiType, Action | None]]) -> dict[str, Any]:
+        self._admin()
         seen: set[PiiType] = set()
         fixed: dict[PiiType, Action] = {}
         for t, a in rules:
@@ -86,11 +94,13 @@ class AdminService:
         }
 
     def reset_beliefs(self) -> None:
+        self._admin()
         with self.c.db.transaction():
             n = SqlBeliefStore(self.c.db).reset()
             self.c.crypto.audit.append(actor_of(self.user), "beliefs_reset", {"count": n})
 
     def audit_page(self, before_seq: int | None, limit: int) -> dict[str, Any]:
+        self._admin()
         recs = SqlAuditStore(self.c.db).page(before_seq, limit + 1)
         more = len(recs) > limit
         recs = recs[:limit]
@@ -110,6 +120,7 @@ class AdminService:
         return {"items": items, "next_before_seq": recs[-1].seq if more and recs else None}
 
     def verify(self) -> dict[str, Any]:
+        self._admin()
         saved = self.c.load_anchor()
         res = self.c.crypto.audit.verify(saved[0] if saved else None)
         return {
@@ -119,6 +130,7 @@ class AdminService:
         }  # fmt: skip
 
     def save_anchor(self) -> dict[str, Any]:
+        self._admin()
         audit = self.c.crypto.audit
         nxt = audit.anchor()
         audit.append(actor_of(self.user), "anchor_saved", {"seq": (nxt.seq + 1) if nxt else 0})

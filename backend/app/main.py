@@ -87,7 +87,12 @@ def create_app(
     api_errors.install(app)
     middleware.install(app, settings)
 
-    @app.get("/health", tags=["health"], response_model=Health, responses={503: {"model": Health}})
+    @app.get(
+        "/health",
+        tags=["health"],
+        response_model=Health,
+        responses={503: {"model": Health, "description": "Model not ready"}},
+    )
     def health(request: Request) -> Health | JSONResponse:
         """Liveness + model readiness (API 4.1): 503 while the model loads."""
         c: Container | None = getattr(request.app.state, "container", None)

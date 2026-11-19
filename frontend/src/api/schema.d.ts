@@ -701,7 +701,7 @@ export interface operations {
                     "application/json": components["schemas"]["Health"];
                 };
             };
-            /** @description Service Unavailable */
+            /** @description Model not ready */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -732,7 +732,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -750,7 +750,7 @@ export interface operations {
                     "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
-            /** @description Too Many Requests */
+            /** @description Error (see error.code) */
             429: {
                 headers: {
                     [name: string]: unknown;
@@ -777,7 +777,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -806,7 +806,7 @@ export interface operations {
                     "application/json": components["schemas"]["Me"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -839,7 +839,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanList"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -848,7 +848,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -857,7 +857,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -890,7 +890,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanAccepted"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -899,7 +899,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -908,7 +908,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Content Too Large */
+            /** @description Error (see error.code) */
             413: {
                 headers: {
                     [name: string]: unknown;
@@ -917,7 +917,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unsupported Media Type */
+            /** @description Error (see error.code) */
             415: {
                 headers: {
                     [name: string]: unknown;
@@ -926,7 +926,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -935,7 +935,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Too Many Requests */
+            /** @description Error (see error.code) */
             429: {
                 headers: {
                     [name: string]: unknown;
@@ -966,7 +966,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanStatusOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -975,7 +975,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -984,7 +984,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1013,7 +1013,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1022,7 +1022,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1031,7 +1031,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Conflict */
+            /** @description Error (see error.code) */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1040,7 +1040,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1075,7 +1075,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanAccepted"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1084,7 +1084,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1093,7 +1093,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Conflict */
+            /** @description Error (see error.code) */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1102,7 +1102,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1133,7 +1133,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanResult"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1142,7 +1142,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1151,7 +1151,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Conflict */
+            /** @description Error (see error.code) */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1160,7 +1160,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1184,7 +1184,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successful Response */
+            /** @description The file */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1193,7 +1193,7 @@ export interface operations {
                     "application/octet-stream": unknown;
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1202,7 +1202,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1211,7 +1211,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Conflict */
+            /** @description Error (see error.code) */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1220,7 +1220,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1251,7 +1251,7 @@ export interface operations {
                     "application/json": components["schemas"]["ScanAccepted"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1260,7 +1260,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1269,7 +1269,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Conflict */
+            /** @description Error (see error.code) */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1278,7 +1278,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1307,7 +1307,7 @@ export interface operations {
                     "application/json": components["schemas"]["RulesOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1316,7 +1316,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1325,7 +1325,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1358,7 +1358,7 @@ export interface operations {
                     "application/json": components["schemas"]["RulesOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1367,7 +1367,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1376,7 +1376,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1409,7 +1409,7 @@ export interface operations {
                     "application/json": components["schemas"]["RevealOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1418,7 +1418,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1427,7 +1427,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Not Found */
+            /** @description Error (see error.code) */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1436,7 +1436,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1445,7 +1445,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Too Many Requests */
+            /** @description Error (see error.code) */
             429: {
                 headers: {
                     [name: string]: unknown;
@@ -1476,7 +1476,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1485,7 +1485,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1494,7 +1494,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1526,7 +1526,7 @@ export interface operations {
                     "application/json": components["schemas"]["AuditPage"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1535,7 +1535,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1544,7 +1544,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1573,7 +1573,7 @@ export interface operations {
                     "application/json": components["schemas"]["VerifyOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1582,7 +1582,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1591,7 +1591,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;
@@ -1620,7 +1620,7 @@ export interface operations {
                     "application/json": components["schemas"]["AnchorOut"];
                 };
             };
-            /** @description Unauthorized */
+            /** @description Error (see error.code) */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1629,7 +1629,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Forbidden */
+            /** @description Error (see error.code) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -1638,7 +1638,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorOut"];
                 };
             };
-            /** @description Unprocessable Content */
+            /** @description Error (see error.code) */
             422: {
                 headers: {
                     [name: string]: unknown;

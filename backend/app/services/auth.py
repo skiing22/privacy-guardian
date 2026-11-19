@@ -90,7 +90,9 @@ class AuthService:
             self.users.set_active(u.id, False)
             self.audit.append(actor, "user_disabled", {"user_id": u.id})
 
-    def login(self, email: str, password: str, ip: str) -> Session:
+    def login(self, email: str, password: str, ip: str, old_token: str | None = None) -> Session:
+        """`old_token`: the session cookie the browser sent, if any. A successful login ends
+        it, so logging in again never leaves an older session alive."""
         email = email.strip().lower()
         fail_key, ip_key = f"login:{email}|{ip}", f"login-ip:{ip}"
         lock_key = f"login-lock:{email}|{ip}"
@@ -105,6 +107,7 @@ class AuthService:
                 self.limiter.add(lock_key)
             raise AppError("auth_failed")
         self.limiter.clear(fail_key)
+        self.logout(old_token)
         token = secrets.token_urlsafe(32)
         now = clock.now()
         self.sessions.create(session_hash(token), u.id, clock.iso(now), clock.iso(now + self.idle))

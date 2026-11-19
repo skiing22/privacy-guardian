@@ -31,9 +31,17 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
+CLEAR_COOKIE = f"{COOKIE}=; Max-Age=0; Path=/; HttpOnly; SameSite=Strict"
+
+
 def _user(request: Request, c: Container) -> UserRow:
     token = request.cookies.get(COOKIE)
-    user = c.auth.current(token)
+    try:
+        user = c.auth.current(token)
+    except AppError as e:
+        if token:  # the browser holds a cookie that no longer works: remove it
+            e.headers = {**e.headers, "Set-Cookie": CLEAR_COOKIE}
+        raise
     request.state.user_id = user.id
     request.state.session_key = session_hash(token or "").hex()[:16]
     return user
