@@ -74,11 +74,11 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P2.1 | `storage/db.py`: engine for `DATA_DIR/app.db`; on connect set WAL, `foreign_keys`, `busy_timeout`, `synchronous=NORMAL`, `secure_delete` |
-| P2.2 | SQLAlchemy models for the 10 tables, `STRICT`, every `CHECK`, FK action and index in DATABASE.md 3 and 6 |
-| P2.3 | Alembic set up (batch mode); revision `0001_initial` incl. `audit_log` append-only triggers |
-| P2.4 | Enum-sync test: SQL `CHECK` lists equal the Python enums |
-| P2.5 | CI: upgrade empty DB → downgrade → upgrade |
+| P2.1 ✅ | `storage/db.py`: engine for `DATA_DIR/app.db`; on connect set WAL, `foreign_keys`, `busy_timeout`, `synchronous=NORMAL`, `secure_delete` |
+| P2.2 ✅ | Done as raw SQL DDL + SQLAlchemy Core instead of ORM models (ADR-0023). Was: SQLAlchemy models for the 10 tables, `STRICT`, every `CHECK`, FK action and index in DATABASE.md 3 and 6 |
+| P2.3 ✅ | Alembic set up (batch mode); revision `0001_initial` incl. `audit_log` append-only triggers |
+| P2.4 ✅ | Enum-sync test: SQL `CHECK` lists equal the Python enums |
+| P2.5 ✅ | CI: upgrade empty DB → downgrade → upgrade |
 
 - **Files:** `backend/app/storage/{db,models}.py`, `backend/app/migrations/`, `backend/alembic.ini`, `pyproject.toml` (SQLAlchemy, Alembic: already approved in ARCHITECTURE 1.1)
 - **Prerequisites:** P1
@@ -92,11 +92,11 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P3.1 | Shared **contract tests** for `BeliefStore`, `TokenRegistry`, `VaultStore`, `AuditStore`, run against the in-memory versions first (they must pass unchanged) |
-| P3.2 | `SqlBeliefStore`, `SqlTokenRegistry` (+ `UNIQUE(full_mac, key_id)`) pass the contract tests |
-| P3.3 | `SqlVaultStore` and `SqlAuditStore` (append in `BEGIN IMMEDIATE`, seq + prev_mac read in the same transaction) pass the contract tests; audit verify works on SQL rows |
-| P3.4 | Encrypted file store: `files/{scan_id}.{kind}`, AES-GCM with `PG_STORAGE_KEY`, associated data `scan_id|kind|key_id` |
-| P3.5 | Repositories: users, sessions, rules, scans/scan_files/decisions **owner-scoped**; a separate `storage/worker_repo.py` (unscoped) for worker and retention |
+| P3.1 ✅ | Shared **contract tests** for `BeliefStore`, `TokenRegistry`, `VaultStore`, `AuditStore`, run against the in-memory versions first (they must pass unchanged) |
+| P3.2 ✅ | `SqlBeliefStore`, `SqlTokenRegistry` (+ `UNIQUE(full_mac, key_id)`) pass the contract tests |
+| P3.3 ✅ | `SqlVaultStore` and `SqlAuditStore` (append in `BEGIN IMMEDIATE`, seq + prev_mac read in the same transaction) pass the contract tests; audit verify works on SQL rows |
+| P3.4 ✅ | Encrypted file store: `files/{scan_id}.{kind}`, AES-GCM with `PG_STORAGE_KEY`, associated data `scan_id|kind|key_id` |
+| P3.5 ✅ | Repositories: users, sessions, rules, scans/scan_files/decisions **owner-scoped**; a separate `storage/worker_repo.py` (unscoped) for worker and retention |
 
 - **Files:** `backend/app/storage/{stores,files,repos,worker_repo}.py`, `tests/storage/`
 - **Prerequisites:** P2
@@ -110,9 +110,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P4.1 | `SqliteSaver` on `DATA_DIR/checkpoints.db` with the existing allow-list serializer |
-| P4.2 | Encryption: LangGraph `EncryptedSerializer` with a small cipher adapter over `cryptography` AES-GCM using `PG_STORAGE_KEY` (no new dependency) |
-| P4.3 | Delete a scan's checkpoint thread (used when a scan ends or is deleted) |
+| P4.1 ✅ | `SqliteSaver` on `DATA_DIR/checkpoints.db` with the existing allow-list serializer |
+| P4.2 ✅ | Encryption: LangGraph `EncryptedSerializer` with a small cipher adapter over `cryptography` AES-GCM using `PG_STORAGE_KEY` (no new dependency) |
+| P4.3 ✅ | Delete a scan's checkpoint thread (used when a scan ends or is deleted) |
 
 - **Files:** `backend/app/graph/checkpoints.py` (new), `graph/serde.py`
 - **Prerequisites:** P1 (keys), P3 not required
@@ -126,12 +126,12 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P5.1 | App factory: routers under `/api/v1`, request-id middleware, security headers (API.md 2.2), `no-store`, `Origin` check on writes |
-| P5.2 | Error model: app errors with the API.md 2.4 codes; one global handler; `500` hides details |
-| P5.3 | Users: bcrypt hashing; `cli create-user`; one-time admin bootstrap from env (writes `user_created`) |
-| P5.4 | Sessions: create, look up by hash, touch at most once a minute, expiry; `POST /auth/login`, `POST /auth/logout`, `GET /auth/me` |
-| P5.5 | Auth dependencies: `current_user`, `require_admin`; disabled users rejected |
-| P5.6 | In-memory rate limiter (API.md 7) with `Retry-After`; login limits wired |
+| P5.1 ✅ | App factory: routers under `/api/v1`, request-id middleware, security headers (API.md 2.2), `no-store`, `Origin` check on writes |
+| P5.2 ✅ | Error model: app errors with the API.md 2.4 codes; one global handler; `500` hides details |
+| P5.3 ✅ | Users: bcrypt hashing; `cli create-user`; one-time admin bootstrap from env (writes `user_created`) |
+| P5.4 ✅ | Sessions: create, look up by hash, touch at most once a minute, expiry; `POST /auth/login`, `POST /auth/logout`, `GET /auth/me` |
+| P5.5 ✅ | Auth dependencies: `current_user`, `require_admin`; disabled users rejected |
+| P5.6 ✅ | In-memory rate limiter (API.md 7) with `Retry-After`; login limits wired |
 
 - **Files:** `backend/app/main.py`, `app/api/{deps,errors,auth}.py`, `app/api/schemas/auth.py`, `app/services/auth.py`, `app/middleware.py`, `app/cli.py`, `pyproject.toml` (`bcrypt`)
 - **Prerequisites:** P3 (users, sessions repos)
@@ -145,10 +145,10 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P6.1 | Cleaned segments across rounds: apply round 1 decisions to the original, later rounds to the previous output, keeping `item_idx` per segment (API.md 4.9) |
-| P6.2 | Writers: TXT/MD (text), CSV (cell by cell via the parser's offset map), DOCX (paragraph and table-cell text via the offset map, keeping paragraph style), PDF → `.txt` |
-| P6.3 | JSON report builder (API.md 4.10): offsets, types, actions, tokens; never values |
-| P6.4 | `output` text per item from the existing `render()` |
+| P6.1 ✅ | Cleaned segments across rounds: apply round 1 decisions to the original, later rounds to the previous output, keeping `item_idx` per segment (API.md 4.9) |
+| P6.2 ✅ | Writers: TXT/MD (text), CSV (cell by cell via the parser's offset map), DOCX (paragraph and table-cell text via the offset map, keeping paragraph style), PDF → `.txt` |
+| P6.3 ✅ | JSON report builder (API.md 4.10): offsets, types, actions, tokens; never values |
+| P6.4 ✅ | `output` text per item from the existing `render()` |
 
 - **Files:** `backend/app/output/{segments,writers,report}.py` (new; domain layer), `app/parsers/files.py` (expose what writers need, no behaviour change)
 - **Prerequisites:** P3 not needed; uses domain only
@@ -162,13 +162,13 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P7.1 | Upload validation (domain helper): streaming size limit, extension + magic bytes, DOCX uncompressed-size check, text decoding (API.md 4.5) |
-| P7.2 | Model lifespan: load NER at startup in a thread; `model_ready` flag; `/health` real; worker waits until ready |
-| P7.3 | Scan service: create scan (encrypt + save original, row `queued`), enqueue; worker thread with FIFO queue |
-| P7.4 | Worker run: decrypt → parse (60 s timeout) → graph with SQL stores, admin `rules` → `PolicyConfig`, `thread_id = scan id`; stream node updates → `step`/`round`/`updated_at` |
-| P7.5 | Finish: one transaction for decisions, cleaned file, `done` + risk, `scan_completed` audit (no filename); delete checkpoint thread |
-| P7.6 | Review pause → `needs_review`; resume with answers (validated); `review` audit; beliefs updated through `SqlBeliefStore` |
-| P7.7 | Failures → `failed` + `error_code` + step, checkpoint kept; startup recovery re-enqueues `queued`/`running` |
+| P7.1 ✅ | Upload validation (domain helper): streaming size limit, extension + magic bytes, DOCX uncompressed-size check, text decoding (API.md 4.5) |
+| P7.2 ✅ | Model lifespan: load NER at startup in a thread; `model_ready` flag; `/health` real; worker waits until ready |
+| P7.3 ✅ | Scan service: create scan (encrypt + save original, row `queued`), enqueue; worker thread with FIFO queue |
+| P7.4 ✅ | Worker run: decrypt → parse (60 s timeout) → graph with SQL stores, admin `rules` → `PolicyConfig`, `thread_id = scan id`; stream node updates → `step`/`round`/`updated_at` |
+| P7.5 ✅ | Finish: one transaction for decisions, cleaned file, `done` + risk, `scan_completed` audit (no filename); delete checkpoint thread |
+| P7.6 ✅ | Review pause → `needs_review`; resume with answers (validated); `review` audit; beliefs updated through `SqlBeliefStore` |
+| P7.7 ✅ | Failures → `failed` + `error_code` + step, checkpoint kept; startup recovery re-enqueues `queued`/`running` |
 
 - **Files:** `backend/app/services/scans.py`, `app/runtime/{lifespan,worker}.py`, `app/parsers/validate.py` (new), `app/graph/build.py` (only if a hook is truly needed; prefer streaming)
 - **Prerequisites:** P3, P4, P6
@@ -182,12 +182,12 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P8.1 | `POST /scans` (multipart, streaming limit), `GET /scans` (cursor, `status` filter) |
-| P8.2 | `GET /scans/{id}` (status, step label, review items with context, risk, error) |
-| P8.3 | `POST /scans/{id}/answers` (completeness rules, `409` repeat) |
-| P8.4 | `GET /scans/{id}/result`, `GET /scans/{id}/download?kind=` (filenames by scan id, `no-store`) |
-| P8.5 | `POST /scans/{id}/retry`, `DELETE /scans/{id}` (cascade + files + checkpoints + unused vault rows) |
-| P8.6 | Scan rate limits (20/hour, 3 open) and polling exemption |
+| P8.1 ✅ | `POST /scans` (multipart, streaming limit), `GET /scans` (cursor, `status` filter) |
+| P8.2 ✅ | `GET /scans/{id}` (status, step label, review items with context, risk, error) |
+| P8.3 ✅ | `POST /scans/{id}/answers` (completeness rules, `409` repeat) |
+| P8.4 ✅ | `GET /scans/{id}/result`, `GET /scans/{id}/download?kind=` (filenames by scan id, `no-store`) |
+| P8.5 ✅ | `POST /scans/{id}/retry`, `DELETE /scans/{id}` (cascade + files + checkpoints + unused vault rows) |
+| P8.6 ✅ | Scan rate limits (20/hour, 3 open) and polling exemption |
 
 - **Files:** `backend/app/api/scans.py`, `app/api/schemas/scans.py`, `app/services/scans.py`
 - **Prerequisites:** P5, P7
@@ -201,10 +201,10 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P9.1 | `GET/PUT /admin/rules` with `allowed_actions`; `rules_changed` audit |
-| P9.2 | `POST /admin/reveal` (audit before value; denied attempts logged; 10/hour) |
-| P9.3 | `POST /admin/beliefs/reset` |
-| P9.4 | `GET /admin/audit` (`before_seq` paging, actor resolved to email), `POST /admin/audit/verify`, `POST /admin/audit/anchor` (anchor file in `DATA_DIR`) |
+| P9.1 ✅ | `GET/PUT /admin/rules` with `allowed_actions`; `rules_changed` audit |
+| P9.2 ✅ | `POST /admin/reveal` (audit before value; denied attempts logged; 10/hour) |
+| P9.3 ✅ | `POST /admin/beliefs/reset` |
+| P9.4 ✅ | `GET /admin/audit` (`before_seq` paging, actor resolved to email), `POST /admin/audit/verify`, `POST /admin/audit/anchor` (anchor file in `DATA_DIR`) |
 
 - **Files:** `backend/app/api/admin.py`, `app/api/schemas/admin.py`, `app/services/admin.py`
 - **Prerequisites:** P5, P8 (a scan to reveal from)
@@ -218,9 +218,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P10.1 | Retention job thread: the 6 steps of DATABASE 10.3, at startup and every 24 h; `retention` audit with counts |
-| P10.2 | `cli backup` (SQLite online backup + files) and a pre-migration backup in the start script |
-| P10.3 | Restore runbook in `docs/` (DATABASE 10.4) and a test of it |
+| P10.1 ✅ | Retention job thread: the 6 steps of DATABASE 10.3, at startup and every 24 h; `retention` audit with counts |
+| P10.2 ✅ | `cli backup` (SQLite online backup + files) and a pre-migration backup in the start script |
+| P10.3 ✅ | Restore runbook in `docs/` (DATABASE 10.4) and a test of it |
 
 - **Files:** `backend/app/services/retention.py`, `app/runtime/lifespan.py`, `app/cli.py`, `docs/runbook-backup-restore.md`
 - **Prerequisites:** P8

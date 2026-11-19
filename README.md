@@ -5,7 +5,8 @@ with a tamper-evident audit log. Built on a LangGraph agent graph with parallel 
 review pause, a leak-check loop, and learned sensitivity beliefs.
 
 ## Status
-Backend core (M0 to M4) done, tag `v0.5.0`. Web backend and app in progress: see
+Backend core (M0 to M4) done, tag `v0.5.0`. Web backend (database, auth, scan and admin API,
+worker, retention) done (P2 to P10). Web app in progress: see
 [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
 ## Documents
@@ -52,6 +53,15 @@ ruff check . && ruff format --check . && mypy app && python scripts/check_layers
 npm run format:check && npm run typecheck && npm run lint && npm test && npm run build
 npm run gen:api                     # after any API change; commit src/api/schema.d.ts
 ```
+
+## Server commands
+```bash
+cd backend                          # in Docker: docker compose exec app python -m app.manage ...
+python -m app.manage create-user you@example.com --role admin   # asks for the password
+python -m app.manage backup ../backups/today                    # see docs/runbooks/backup-restore.md
+python -m app.manage audit-verify
+```
+Or set `ADMIN_EMAIL` and `ADMIN_PASSWORD` once: the first admin is created at first start.
 
 ## CLI demo (real model, no web app needed)
 ```bash

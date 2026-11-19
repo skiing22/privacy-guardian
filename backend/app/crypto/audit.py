@@ -16,7 +16,9 @@ NFR-04: payloads must never contain raw PII, only tokens, types, counts and ids.
 import hashlib
 import hmac
 import json
+import threading
 from collections.abc import Callable
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
 from typing import Any, Protocol
@@ -94,8 +96,18 @@ class AuditLog:
     ) -> None:
         self.keys, self.clock = keys, clock
         self.store: AuditStore = store or InMemoryAuditStore()
+        # Read-last + append must not interleave between threads (one process, D17).
+        # Across processes the SQL primary key on seq rejects a fork instead.
+        self._lock = threading.Lock()
 
     def append(self, actor: str, event: str, payload: dict[str, Any]) -> AuditRecord:
+        # Lock order is always: the store's transaction (database write lock) first, then
+        # this lock. Taking them the other way round could make two threads wait on each other.
+        atomic = getattr(self.store, "atomic", None)
+        with atomic() if atomic else nullcontext(), self._lock:
+            return self._append(actor, event, payload)
+
+    def _append(self, actor: str, event: str, payload: dict[str, Any]) -> AuditRecord:
         recs = self.store.all()
         prev = recs[-1].mac if recs else GENESIS
         kid, key = self.keys.current

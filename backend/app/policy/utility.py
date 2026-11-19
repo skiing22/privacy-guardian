@@ -41,7 +41,7 @@ class PolicyConfig:
 @dataclass(frozen=True)
 class Decision:
     action: Action
-    reason: str  # "utility", "override", "review", "risk", "business number", "leak"
+    reason: str  # "utility", "override", "review", "risk", "business number"
     utilities: dict[Action, float] = field(default_factory=dict)
 
 

@@ -170,7 +170,7 @@ Public. Used by the host and by the frontend to show "Preparing the model".
 ```json
 { "status": "ok", "model_ready": true, "version": "0.6.0" }
 ```
-While the model loads: `503` with `"model_ready": false` and error code `model_not_ready`. Never reveals keys, paths or config.
+While the model loads: `503` with `{ "status": "starting", "model_ready": false, "version": "…", "error": { "code": "model_not_ready", … } }`. Never reveals keys, paths or config.
 
 ### 4.2 `POST /auth/login`
 
