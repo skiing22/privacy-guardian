@@ -4,6 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { vi } from 'vitest'
 import { createQueryClient } from '../app/queryClient'
 import { routes } from '../app/routes'
+import { ToastProvider } from '../ui/Toast'
 
 type Reply = { status: number; body?: unknown }
 type Handler = (init: RequestInit | undefined) => Reply
@@ -39,10 +40,12 @@ export function fakeApi(handlers: Record<string, Handler | Reply>) {
 export function renderAt(path: string) {
   const client = createQueryClient()
   const router = createMemoryRouter(routes, { initialEntries: [path] })
-  render(
+  const view = render(
     <QueryClientProvider client={client}>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </QueryClientProvider>,
   )
-  return { client, router }
+  return { client, router, container: view.container }
 }

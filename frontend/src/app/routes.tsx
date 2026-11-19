@@ -1,8 +1,10 @@
 import { Navigate, type RouteObject } from 'react-router-dom'
 import { RequireAdmin, RequireAuth } from '../features/auth/guards'
 import { Login } from '../pages/Login'
+import { NewScan } from '../pages/NewScan'
 import { NotFound } from '../pages/NotFound'
 import { Placeholder } from '../pages/Placeholder'
+import { Scans } from '../pages/Scans'
 import { Shell } from './Shell'
 
 // ARCHITECTURE 4: every URL is real and shareable. `/` becomes the landing page S0 in M7.
@@ -17,8 +19,8 @@ export const routes: RouteObject[] = [
         element: <RequireAuth />,
         children: [
           { index: true, element: <Navigate to="/scans" replace /> },
-          { path: 'scans', element: <Placeholder title="Scans" phase="P14" /> },
-          { path: 'scans/new', element: <Placeholder title="New scan" phase="P14" /> },
+          { path: 'scans', element: <Scans /> },
+          { path: 'scans/new', element: <NewScan /> },
           { path: 'scans/:id', element: <Placeholder title="Scan" phase="P15" /> },
           {
             path: 'admin',

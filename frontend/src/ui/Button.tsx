@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from 'react'
 
 // DESIGN 5.1: one button family. Loading swaps the label for the action in progress and
 // disables the button. No spinners, no arrows.
-type Variant = 'primary' | 'secondary' | 'text' | 'danger'
+type Variant = 'primary' | 'secondary' | 'text' | 'text-danger' | 'danger'
 
 const BASE =
   'inline-flex items-center justify-center gap-2 rounded-md button-md transition-colors duration-200 ease-base ' +
@@ -14,14 +14,17 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     'h-10 pointer-coarse:min-h-11 px-3 bg-paper text-ink border border-rule-strong hover:bg-desk',
   text: 'px-1 text-sign underline decoration-transparent underline-offset-4 hover:decoration-sign',
+  // Text size, danger colour: a destructive action inside a table row (still asks first).
+  'text-danger':
+    'px-1 text-risk-high underline decoration-transparent underline-offset-4 hover:decoration-risk-high',
   danger:
     'h-10 pointer-coarse:min-h-11 px-3 bg-paper text-risk-high border border-risk-high hover:bg-risk-high-bg',
 }
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant
-  loading?: boolean
-  loadingLabel?: string
+  loading?: boolean | undefined
+  loadingLabel?: string | undefined
 }
 
 export function Button({

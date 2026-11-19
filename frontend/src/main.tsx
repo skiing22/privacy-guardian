@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { queryClient } from './app/queryClient'
 import { routes } from './app/routes'
 import './styles/index.css'
+import { ToastProvider } from './ui/Toast'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('root element missing')
@@ -12,7 +13,9 @@ if (!root) throw new Error('root element missing')
 createRoot(root).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={createBrowserRouter(routes)} />
+      <ToastProvider>
+        <RouterProvider router={createBrowserRouter(routes)} />
+      </ToastProvider>
     </QueryClientProvider>
   </StrictMode>,
 )
