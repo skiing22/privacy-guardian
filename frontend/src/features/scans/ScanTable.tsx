@@ -41,7 +41,7 @@ export function ScanTable({ scans, onDelete, now }: Props) {
           {scans.map((s) => (
             <tr
               key={s.id}
-              className="border-b border-rule transition-colors duration-200 ease-base hover:bg-desk"
+              className="border-b border-rule last:border-b-0 transition-colors duration-200 ease-base hover:bg-desk"
             >
               <td className={`${TD} max-w-[360px]`}>
                 <Link
