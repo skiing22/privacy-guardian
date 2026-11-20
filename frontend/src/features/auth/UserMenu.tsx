@@ -46,7 +46,8 @@ export function UserMenu({ user }: { user: Me }) {
         type="button"
         aria-expanded={open}
         aria-controls={id}
-        aria-label={`Account menu for ${user.email}`}
+        // WCAG 2.5.3: the name starts with the visible initials, so voice control works
+        aria-label={`${initials(user.email)} Account menu for ${user.email}`}
         onClick={() => setOpen((o) => !o)}
         className="h-10 w-10 rounded-md bg-sign-soft text-sign title-4 hover:bg-desk focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sign"
       >

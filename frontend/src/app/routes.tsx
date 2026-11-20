@@ -5,7 +5,7 @@ import { AdminRules } from '../pages/AdminRules'
 import { Login } from '../pages/Login'
 import { NewScan } from '../pages/NewScan'
 import { NotFound } from '../pages/NotFound'
-import { Placeholder } from '../pages/Placeholder'
+import { Privacy } from '../pages/Privacy'
 import { Scan } from '../pages/Scan'
 import { Scans } from '../pages/Scans'
 import { Shell } from './Shell'
@@ -17,7 +17,7 @@ export const routes: RouteObject[] = [
   {
     element: <Shell />,
     children: [
-      { path: 'privacy', element: <Placeholder title="Privacy and terms" phase="P18" /> },
+      { path: 'privacy', element: <Privacy /> },
       {
         element: <RequireAuth />,
         children: [

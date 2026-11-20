@@ -348,13 +348,19 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P18.1 | S7 Privacy and terms (states retention 7 days, backups 7 days, what is stored, who sees it); S8 404 |
-| P18.2 | Accessibility pass (DESIGN 11): keyboard-only run of all journeys, focus never under the nav, axe checks in Playwright |
-| P18.3 | Responsive pass at 320, 390, 768, 1024, 1440; touch targets ≥ 44 px |
-| P18.4 | Playwright J1, J2, J4 in CI on `main` against the container (fake model) |
+| P18.1 ✅ | S7 Privacy and terms (states retention 7 days, backups 7 days, what is stored, who sees it); S8 404 |
+| P18.2 ✅ | Accessibility pass (DESIGN 11): keyboard-only run of all journeys, focus never under the nav, axe checks in Playwright |
+| P18.3 ✅ | Responsive pass at 320, 390, 768, 1024, 1440; touch targets ≥ 44 px |
+| P18.4 ✅ | Playwright J1, J2, J4 in CI (`e2e` job, every push and pull request) |
 
 - **Files:** `frontend/src/pages/{Privacy,NotFound}.tsx`, `e2e/*`, `ci.yml`
 - **Prerequisites:** P16, P17
+- **As built (P18.4):** the journeys run against the **real app** (FastAPI, SQLite, worker,
+  built frontend) started by `e2e/server.py`, with one change: the model is swapped for a
+  fixed name finder. The fake model in the container is random, so it never pauses a scan
+  for review and J2 could not run against it. The container stays covered by the `docker`
+  job (`scripts/smoke.sh`). Each run needs a fresh data folder, because J4 tampers with
+  the audit log on purpose.
 - **Done when:** all journeys pass in Playwright; no axe violations; **tag `v0.7.0`** (M6 done)
 
 ---

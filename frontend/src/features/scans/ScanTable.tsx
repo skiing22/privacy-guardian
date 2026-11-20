@@ -77,7 +77,7 @@ export function ScanTable({ scans, onDelete, now }: Props) {
           <li key={s.id} className="border-b border-rule last:border-b-0 py-3 flex flex-col gap-2">
             <Link
               to={`/scans/${s.id}`}
-              className="title-3 text-ink break-all hover:text-sign py-1 focus-visible:outline-2 focus-visible:outline-sign rounded-sm"
+              className="title-3 text-ink break-all hover:text-sign py-1 pointer-coarse:min-h-11 flex items-center focus-visible:outline-2 focus-visible:outline-sign rounded-sm"
             >
               {s.filename}
             </Link>
