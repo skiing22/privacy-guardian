@@ -333,9 +333,9 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P17.1 | S5 rules table (grouped by family, allowed actions only, Save rules); Reset learning (danger + dialog) |
-| P17.2 | S5 Show a real value: form → confirm dialog → value box, auto-hide 60 s (pauses on focus/hover) |
-| P17.3 | S6 audit table (paging, event labels, Geist Mono tokens); Verify log banner; tampered row outlined and scrolled into view; Save anchor |
+| P17.1 ✅ | S5 rules table (grouped by family, allowed actions only, Save rules); Reset learning (danger + dialog) |
+| P17.2 ✅ | S5 Show a real value: form → confirm dialog → value box, auto-hide 60 s (pauses on focus/hover) |
+| P17.3 ✅ | S6 audit table (paging, event labels, Geist Mono tokens); Verify log banner; tampered row outlined and scrolled into view; Save anchor |
 
 - **Files:** `frontend/src/pages/{AdminRules,AdminAudit}.tsx`, `features/admin/*`
 - **Prerequisites:** P9, P13

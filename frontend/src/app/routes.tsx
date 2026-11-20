@@ -1,5 +1,7 @@
 import { Navigate, type RouteObject } from 'react-router-dom'
 import { RequireAdmin, RequireAuth } from '../features/auth/guards'
+import { AdminAudit } from '../pages/AdminAudit'
+import { AdminRules } from '../pages/AdminRules'
 import { Login } from '../pages/Login'
 import { NewScan } from '../pages/NewScan'
 import { NotFound } from '../pages/NotFound'
@@ -27,8 +29,8 @@ export const routes: RouteObject[] = [
             path: 'admin',
             element: <RequireAdmin />,
             children: [
-              { path: 'rules', element: <Placeholder title="Rules and vault" phase="P17" /> },
-              { path: 'audit', element: <Placeholder title="Audit log" phase="P17" /> },
+              { path: 'rules', element: <AdminRules /> },
+              { path: 'audit', element: <AdminAudit /> },
             ],
           },
         ],
