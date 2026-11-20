@@ -115,7 +115,9 @@ describe('protected routes', () => {
     const { calls } = fakeApi({ [ME]: { status: 200, body: USER }, [LOGOUT]: { status: 204 } })
     const { client, router } = renderAt('/scans')
     client.setQueryData(['scans'], ['private'])
-    fireEvent.click(await screen.findByRole('button', { name: `Account menu for ${USER.email}` }))
+    fireEvent.click(
+      await screen.findByRole('button', { name: `AR Account menu for ${USER.email}` }),
+    )
     expect(screen.getByText('User')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Log out' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/login'))

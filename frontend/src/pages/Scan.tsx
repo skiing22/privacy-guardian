@@ -104,7 +104,8 @@ export function Scan() {
       <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-1 min-w-0">
           <nav aria-label="Breadcrumb" className="body-6 text-ink-muted">
-            <Link to="/scans" className="text-sign hover:underline">
+            {/* WCAG 1.4.1: a link inside text is underlined, not only coloured */}
+            <Link to="/scans" className="text-sign underline underline-offset-4">
               Scans
             </Link>{' '}
             / <span aria-current="page">{scan.filename}</span>
