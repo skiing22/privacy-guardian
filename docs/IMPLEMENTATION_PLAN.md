@@ -373,12 +373,13 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 
 | Task | Detail |
 | --- | --- |
-| P19.1 👤 | You or a teammate write ~30 Indian-style texts **without looking at fusion rules or v1 errors**, in `[[value|TYPE]]` markup, fake data only |
-| P19.2 | Cache NER outputs for v2; score rules / NER / baseline / fusion; `docs/results/handwritten-v2.md` with the numbers and limits |
-| P19.3 | Any bug found becomes a regression test; **no tuning on v2** (it stays held out) |
+| P19.1 ✅ | You or a teammate write ~30 Indian-style texts **without looking at fusion rules or v1 errors**, in `[[value|TYPE]]` markup, fake data only |
+| P19.2 ✅ | Cache NER outputs for v2; score rules / NER / baseline / fusion; `docs/results/handwritten-v2.md` with the numbers and limits |
+| P19.3 ✅ | Any bug found becomes a regression test; v2 stays the quoted held-out number (0.795). Done: address bugs fixed with tests (ADR-0024); the fix is measured fairly only on a new set v3 |
 
 - **Files:** `data/eval/handwritten_v2.txt`, `data/eval/ner_cache_v2.jsonl`, `docs/results/handwritten-v2.md`
 - **Done when:** the v2 F1 is recorded; PRD success criterion 2 checked (F1 ≥ 0.90, checksum-type precision 1.0)
+- **Result:** held-out F1 **0.795** (target not met), checksum-type precision 1.0. Address fix (ADR-0024, owner approved) gives 0.922 on the now-seen v2; a new set v3 is needed to quote it.
 
 ### P20. Deployment
 

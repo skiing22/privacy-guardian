@@ -70,30 +70,62 @@ def test_split_indian_address_is_rebuilt() -> None:
         ner(t, "462003", T.ADDRESS),
     ]
     assert out(t, spans) == [
-        ("22, Nehru Nagar", T.ADDRESS),
-        ("Bhopal", T.LOCATION),
+        ("22, Nehru Nagar, Bhopal", T.ADDRESS),
         ("462003", T.ADDRESS),
     ]
 
 
-def test_flat_and_park_merge_but_city_stays() -> None:
+# ADR-0024: a city written right after a street is part of the address; a PIN stays apart.
+
+
+def test_flat_park_and_city_form_one_address() -> None:
     t = "They live at Flat 3B, Green Park, Hyderabad."
     spans = [
         ner(t, "Flat 3B", T.ADDRESS),
         ner(t, "Green Park", T.LOCATION),
         ner(t, "Hyderabad", T.LOCATION),
     ]
-    assert out(t, spans) == [("Flat 3B, Green Park", T.ADDRESS), ("Hyderabad", T.LOCATION)]
+    assert out(t, spans) == [("Flat 3B, Green Park, Hyderabad", T.ADDRESS)]
 
 
-def test_city_and_pin_stay_apart() -> None:
+def test_pin_stays_apart_from_address() -> None:
     t = "Address: 14 MG Road, Kochi 682016."
     spans = [
         ner(t, "14 MG Road", T.ADDRESS),
         ner(t, "Kochi", T.LOCATION),
         ner(t, "682016", T.ADDRESS),
     ]
-    assert len(out(t, spans)) == 3
+    assert out(t, spans) == [("14 MG Road, Kochi", T.ADDRESS), ("682016", T.ADDRESS)]
+
+
+def test_city_alone_stays_location() -> None:
+    t = "She moved to Jaipur, then to Kochi."
+    spans = [ner(t, "Jaipur", T.LOCATION), ner(t, "Kochi", T.LOCATION)]
+    assert out(t, spans) == [("Jaipur", T.LOCATION), ("Kochi", T.LOCATION)]
+
+
+def test_city_after_full_stop_stays_apart() -> None:
+    t = "I stay at 14 MG Road. Kochi is lovely."
+    spans = [ner(t, "14 MG Road", T.ADDRESS), ner(t, "Kochi", T.LOCATION)]
+    assert out(t, spans) == [("14 MG Road", T.ADDRESS), ("Kochi", T.LOCATION)]
+
+
+def test_building_word_cut_off_address_is_kept() -> None:
+    # Bug: the model stopped at "Park", leaving "Apartments" visible in the cleaned file.
+    t = "Ship to Flat 2, Lake Park Apartments, Indore today."
+    spans = [
+        ner(t, "Flat 2", T.ADDRESS),
+        ner(t, "Lake Park", T.ADDRESS),
+        ner(t, "Indore", T.LOCATION),
+    ]
+    assert out(t, spans) == [("Flat 2, Lake Park Apartments, Indore", T.ADDRESS)]
+
+
+def test_label_word_is_not_part_of_value() -> None:
+    # Bug: "PIN 560034" kept the word PIN; "OTP 918273" hid the context that marks it harmless.
+    t = "Bangalore, PIN 560034. Your OTP 918273 expires soon."
+    spans = [ner(t, "PIN 560034", T.ADDRESS, 0.8), ner(t, "OTP 918273", T.GOV_ID, 0.85)]
+    assert out(t, spans) == [("560034", T.ADDRESS)]
 
 
 def test_split_licence_number_merges() -> None:

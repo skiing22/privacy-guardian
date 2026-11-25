@@ -27,5 +27,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0021](0021-prd-scope-decisions.md) | MVP scope and design: SQLite, polling, PDF->txt, 6 screens + S0/S7/S8, vault 7 days, eval set v2 | Accepted | 2026-11-19 |
 | [0022](0022-architecture-decisions.md) | VM hosting, session cookies, 4th storage key, model in HF repo, single worker | Accepted | 2026-11-19 |
 | [0023](0023-backend-implementation-choices.md) | Backend as built: SQL DDL + Core, strict encrypted checkpoints, output rebuilt from decisions, DOCX headers emptied | Proposed | 2026-11-19 |
+| [0024](0024-address-span-rule.md) | One address from street to city, PIN apart, label words trimmed (changes ADR-0013 merge) | Accepted | 2026-11-26 |
 
 Template: [template.md](template.md)
