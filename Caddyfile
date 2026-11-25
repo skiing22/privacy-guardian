@@ -1,0 +1,7 @@
+# HTTPS in front of the app (ADR-0025: Proposed). The app sets its own security headers
+# (API 2.2), so Caddy only terminates TLS and forwards.
+# No `log` directive on purpose: no access log here, so no client IPs or URLs on disk (API 11).
+# No `encode` on purpose: responses carry personal data next to user-controlled text.
+{$DOMAIN} {
+	reverse_proxy app:8000
+}

@@ -393,7 +393,8 @@ M7 ship      P19 eval set v2 ∥ (any time, 👤) ─► P20 deploy ─► P21 R
 | P20.4 | Schedule daily backups (DATABASE 10.2) to a second location; save the audit anchor off the server (documented process) |
 | P20.5 | Production smoke test: J1–J5 on the live URL; headers check; no DEV keys accepted |
 
-- **Files:** `docs/runbook-deploy.md`, deploy config for the chosen host
+- **Files:** `docs/runbooks/deploy.md`, `docker-compose.prod.yml`, `Caddyfile` (ADR-0025, Proposed)
+- **Prepared 2026-11-26:** config and runbook written; prod mode, key refusal, headers, cookie and migrations verified locally (`docs/results/deploy-prep-2026-11-26.md`). P20.1-P20.5 still need the VM
 - **Prerequisites:** P18, D13 answered
 - **Done when:** PRD success criteria 1, 4, 5, 6, 9 pass on the live URL
 

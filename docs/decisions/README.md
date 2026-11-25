@@ -28,5 +28,6 @@ One file per decision (ADR). Never delete an ADR; if a decision changes, add a n
 | [0022](0022-architecture-decisions.md) | VM hosting, session cookies, 4th storage key, model in HF repo, single worker | Accepted | 2026-11-19 |
 | [0023](0023-backend-implementation-choices.md) | Backend as built: SQL DDL + Core, strict encrypted checkpoints, output rebuilt from decisions, DOCX headers emptied | Proposed | 2026-11-19 |
 | [0024](0024-address-span-rule.md) | One address from street to city, PIN apart, label words trimmed (changes ADR-0013 merge) | Accepted | 2026-11-26 |
+| [0025](0025-https-caddy-on-vm.md) | HTTPS on the VM with Caddy in a production compose override | Proposed | 2026-11-26 |
 
 Template: [template.md](template.md)
