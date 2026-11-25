@@ -1,0 +1,32 @@
+{"text": "hey Ravi Kumar, call me back on +91 98765 43210 when you reach Kochi.", "spans": [[4, 14, "PERSON", 0.9974], [32, 47, "PHONE", 0.9998], [63, 68, "PERSON", 0.639]]}
+{"text": "kal asha ka parcel 12, Lake View Road, Pune pe deliver kar dena, PIN 411027.", "spans": [[19, 37, "ADDRESS", 0.8543], [39, 43, "LOCATION", 0.9436], [69, 75, "ADDRESS", 0.5637]]}
+{"text": "My name is Kiran and I am moving to Jaipur next week, ping me at kiran.mock@fake-mail.test.", "spans": [[11, 16, "PERSON", 0.9958], [36, 42, "LOCATION", 0.9991]]}
+{"text": "Sunny is coming too, so please book two seats for us.", "spans": [[0, 5, "PERSON", 0.9955]]}
+{"text": "Please update my details: Neha Sharma, Female, age 27, DOB 14 August 1999.", "spans": [[26, 37, "PERSON", 0.9991], [39, 45, "GENDER", 0.9989], [51, 53, "AGE", 0.999], [59, 73, "DATE", 0.9989]]}
+{"text": "Patient Arjun Mehta, age 46, admitted on Tuesday, 24 November 2026 with fever and dehydration.", "spans": [[8, 19, "PERSON", 0.8252], [25, 27, "AGE", 0.9988], [50, 66, "DATE", 0.9994]]}
+{"text": "OPD note: Sana Khan, Female, contact 09876543210, follow-up on 30 November 2026.", "spans": [[10, 19, "PERSON", 0.9898], [21, 27, "GENDER", 0.9987], [37, 48, "PHONE", 0.6154], [63, 79, "DATE", 0.9992]]}
+{"text": "Emergency contact Vikram Das, phone +91 91234 56789, address Flat 8, Green Park Apartments, Bhopal.", "spans": [[18, 28, "PERSON", 0.999], [36, 51, "PHONE", 0.9998], [61, 67, "ADDRESS", 0.9931], [69, 79, "ADDRESS", 0.6063], [92, 98, "LOCATION", 0.9972]]}
+{"text": "Patient ID card submitted by Mohan Nair, Aadhaar 482917364505.", "spans": [[29, 39, "PERSON", 0.9953], [49, 61, "GOV_ID", 0.7542]]}
+{"text": "Discharge summary prepared for Priya Menon, aged 38, residing at Thrissur.", "spans": [[31, 42, "PERSON", 0.9983], [49, 51, "AGE", 0.9991], [65, 73, "LOCATION", 0.9986]]}
+{"text": "Your account ending XX4521 received INR 850. OTP 741903 is valid for 5 minutes.", "spans": [[20, 26, "GOV_ID", 0.9873], [36, 43, "GOV_ID", 0.5873], [45, 55, "GOV_ID", 0.8131]]}
+{"text": "KYC update for Ramesh Iyer, PAN ABCPK1234D, IFSC HDFC0001234.", "spans": [[15, 26, "PERSON", 0.9986], [32, 42, "GOV_ID", 0.994], [49, 60, "GOV_ID", 0.9974]]}
+{"text": "Payment of INR 1,250 sent to Aditi Verma at aditi.fake@sample.test on 26 November 2026.", "spans": [[29, 40, "PERSON", 0.9989], [70, 86, "DATE", 0.9994]]}
+{"text": "Card transaction: 4532019876543215 charged INR 399 at a local store.", "spans": [[18, 34, "CARD", 0.9814], [47, 50, "GOV_ID", 0.7384]]}
+{"text": "Bank correspondence address: 22/4 Sunrise Colony, Indore, PIN 452016, mobile +91 90123 45678.", "spans": [[29, 33, "ADDRESS", 0.9774], [34, 48, "LOCATION", 0.9638], [50, 56, "LOCATION", 0.9791], [58, 68, "ADDRESS", 0.7648], [77, 92, "PHONE", 0.9997]]}
+{"text": "Dear HR, I am Manish Gupta, age 31, and my email is manish.cv@mockmail.test.", "spans": [[14, 26, "PERSON", 0.9987], [32, 34, "AGE", 0.9986], [70, 71, "EMAIL", 0.5682]]}
+{"text": "Resume of Divya Rao: based in Hyderabad, phone +91 93456 78901, PAN FGHPR5678K.", "spans": [[10, 19, "PERSON", 0.994], [30, 39, "LOCATION", 0.998], [47, 62, "PHONE", 0.9997], [68, 78, "GOV_ID", 0.9982]]}
+{"text": "Hi recruitment team, Nitin Paul can join on 15 December 2026. Please contact nitin.hr@fake-mail.test.", "spans": [[21, 31, "PERSON", 0.9996], [44, 60, "DATE", 0.9993], [77, 82, "EMAIL", 0.472]]}
+{"text": "Candidate Meera Joshi, Female, driving licence DL-08-2026-0045821, address 9 Rose Street, Delhi.", "spans": [[10, 21, "PERSON", 0.999], [23, 29, "GENDER", 0.999], [47, 53, "GOV_ID", 0.6664], [53, 65, "PHONE", 0.8891], [75, 88, "ADDRESS", 0.9924], [90, 95, "LOCATION", 0.9972]]}
+{"text": "Attached is the CV of Suresh Babu, passport P7654321, currently in Chennai.", "spans": [[22, 33, "PERSON", 0.9919], [44, 52, "GOV_ID", 0.9991], [67, 74, "LOCATION", 0.9924]]}
+{"text": "Delivery for Ritu Singh: House 17, Main Road, Ranchi, PIN 834001, phone +91 97654 32109.", "spans": [[13, 23, "PERSON", 0.9924], [25, 44, "ADDRESS", 0.8938], [46, 52, "LOCATION", 0.9983], [58, 64, "ADDRESS", 0.5569], [72, 87, "PHONE", 0.9998]]}
+{"text": "Please send the documents to Abhishek Roy at abhishek.roy@demo.test, Kolkata.", "spans": [[29, 41, "PERSON", 0.9985], [45, 57, "EMAIL", 0.79], [69, 76, "LOCATION", 0.9977]]}
+{"text": "I filled in the form for राधा शर्मा, born on 3 March 2001, address 5 Lotus Lane, Lucknow.", "spans": [[45, 57, "DATE", 0.9987], [67, 79, "ADDRESS", 0.9786], [81, 88, "LOCATION", 0.9981]]}
+{"text": "Your train 12645 departs at 18:40. PNR 8345678901. No need to reply.", "spans": [[11, 16, "ADDRESS", 0.9916], [39, 49, "GOV_ID", 0.9912]]}
+{"text": "Order ID 90384751 confirmed. Amount INR 2,499. OTP 558120. Thanks for shopping!", "spans": [[9, 17, "GOV_ID", 0.9988], [51, 57, "GOV_ID", 0.8708]]}
+{"text": "Meeting room 204 is booked at 3:30 PM. Ticket number 7812456. Please arrive early.", "spans": [[13, 16, "ADDRESS", 0.9959], [53, 60, "GOV_ID", 0.8489]]}
+{"text": "The word Kiran appears in this sentence as a name: Kiran will handle the request.", "spans": [[9, 14, "PERSON", 0.9208], [51, 56, "PERSON", 0.9784]]}
+{"text": "I saw the word Asha in the note, but Asha is actually the applicant's name.", "spans": [[15, 19, "PERSON", 0.9872], [37, 41, "PERSON", 0.9963]]}
+{"text": "Sunny weather is expected tomorrow; Sunny submitted the application today.", "spans": [[36, 41, "PERSON", 0.9429]]}
+{"text": "This sample number 123456789012 fails the Aadhaar checksum and should not be marked.", "spans": [[19, 31, "GOV_ID", 0.9989]]}
+{"text": "Visitor Pooja Sethi and Rohan Sethi arrived on Wednesday, 25 November 2026 at Mumbai.", "spans": [[8, 19, "PERSON", 0.9804], [24, 35, "PERSON", 0.9945], [58, 74, "DATE", 0.9993], [78, 84, "LOCATION", 0.9986]]}
+{"text": "My IP is 192.0.2.45, and my voter card number is XYZ1234567.", "spans": [[49, 59, "GOV_ID", 0.9995]]}

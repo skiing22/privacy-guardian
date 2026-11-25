@@ -1,0 +1,33 @@
+# Hand-written Indian test set v2. All data is FAKE.
+hey [[Ravi Kumar|PERSON]], call me back on [[+91 98765 43210|PHONE]] when you reach [[Kochi|LOCATION]].
+kal [[asha|PERSON]] ka parcel [[12, Lake View Road, Pune|ADDRESS]] pe deliver kar dena, PIN [[411027|ADDRESS]].
+My name is [[Kiran|PERSON]] and I am moving to [[Jaipur|LOCATION]] next week, ping me at [[kiran.mock@fake-mail.test|EMAIL]].
+[[Sunny|PERSON]] is coming too, so please book two seats for us.
+Please update my details: [[Neha Sharma|PERSON]], [[Female|GENDER]], age [[27|AGE]], DOB [[14 August 1999|DATE]].
+Patient [[Arjun Mehta|PERSON]], age [[46|AGE]], admitted on [[Tuesday, 24 November 2026|DATE]] with fever and dehydration.
+OPD note: [[Sana Khan|PERSON]], [[Female|GENDER]], contact [[09876543210|PHONE]], follow-up on [[30 November 2026|DATE]].
+Emergency contact [[Vikram Das|PERSON]], phone [[+91 91234 56789|PHONE]], address [[Flat 8, Green Park Apartments, Bhopal|ADDRESS]].
+Patient ID card submitted by [[Mohan Nair|PERSON]], Aadhaar [[482917364505|AADHAAR]].
+Discharge summary prepared for [[Priya Menon|PERSON]], aged [[38|AGE]], residing at [[Thrissur|LOCATION]].
+Your account ending XX4521 received INR 850. OTP 741903 is valid for 5 minutes.
+KYC update for [[Ramesh Iyer|PERSON]], PAN [[ABCPK1234D|PAN]], IFSC [[HDFC0001234|IFSC]].
+Payment of INR 1,250 sent to [[Aditi Verma|PERSON]] at [[aditi.fake@sample.test|EMAIL]] on [[26 November 2026|DATE]].
+Card transaction: [[4532019876543215|CARD]] charged INR 399 at a local store.
+Bank correspondence address: [[22/4 Sunrise Colony, Indore|ADDRESS]], PIN [[452016|ADDRESS]], mobile [[+91 90123 45678|PHONE]].
+Dear HR, I am [[Manish Gupta|PERSON]], age [[31|AGE]], and my email is [[manish.cv@mockmail.test|EMAIL]].
+Resume of [[Divya Rao|PERSON]]: based in [[Hyderabad|LOCATION]], phone [[+91 93456 78901|PHONE]], PAN [[FGHPR5678K|PAN]].
+Hi recruitment team, [[Nitin Paul|PERSON]] can join on [[15 December 2026|DATE]]. Please contact [[nitin.hr@fake-mail.test|EMAIL]].
+Candidate [[Meera Joshi|PERSON]], [[Female|GENDER]], driving licence [[DL-08-2026-0045821|GOV_ID]], address [[9 Rose Street, Delhi|ADDRESS]].
+Attached is the CV of [[Suresh Babu|PERSON]], passport [[P7654321|GOV_ID]], currently in [[Chennai|LOCATION]].
+Delivery for [[Ritu Singh|PERSON]]: [[House 17, Main Road, Ranchi|ADDRESS]], PIN [[834001|ADDRESS]], phone [[+91 97654 32109|PHONE]].
+Please send the documents to [[Abhishek Roy|PERSON]] at [[abhishek.roy@demo.test|EMAIL]], [[Kolkata|LOCATION]].
+I filled in the form for [[राधा शर्मा|PERSON]], born on [[3 March 2001|DATE]], address [[5 Lotus Lane, Lucknow|ADDRESS]].
+Your train 12645 departs at 18:40. PNR 8345678901. No need to reply.
+Order ID 90384751 confirmed. Amount INR 2,499. OTP 558120. Thanks for shopping!
+Meeting room 204 is booked at 3:30 PM. Ticket number 7812456. Please arrive early.
+The word Kiran appears in this sentence as a name: [[Kiran|PERSON]] will handle the request.
+I saw the word Asha in the note, but [[Asha|PERSON]] is actually the applicant's name.
+Sunny weather is expected tomorrow; [[Sunny|PERSON]] submitted the application today.
+This sample number 123456789012 fails the Aadhaar checksum and should not be marked.
+Visitor [[Pooja Sethi|PERSON]] and [[Rohan Sethi|PERSON]] arrived on [[Wednesday, 25 November 2026|DATE]] at [[Mumbai|LOCATION]].
+My IP is [[192.0.2.45|IP_ADDRESS]], and my voter card number is [[XYZ1234567|GOV_ID]].
