@@ -82,6 +82,9 @@ def create_app(
         docs_url=None if is_prod else "/docs",
         redoc_url=None,
         openapi_url=None if is_prod else "/openapi.json",
+        # Counted while streaming, so a chunked body with no Content-Length is cut off too,
+        # before auth or form parsing reads it to disk (API 4.5).
+        max_body_size=settings.max_upload_bytes + middleware.MULTIPART_OVERHEAD,
     )
 
     api_errors.install(app)

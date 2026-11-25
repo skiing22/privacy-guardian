@@ -24,3 +24,13 @@ def test_exceptions_log_type_only() -> None:
         rec = logging.LogRecord("app", logging.ERROR, __file__, 1, "failed", None, sys.exc_info())
     out = JsonFormatter().format(rec)
     assert "ValueError" in out and "Arjun" not in out
+
+
+def test_uvicorn_access_log_is_off() -> None:
+    """Bug: uvicorn's own access line (client IP, full URL with query values) reached the
+    log beside app.access. Only app.access, which has no IP or query, may log requests."""
+    from app.log import configure_logging
+
+    configure_logging("INFO")
+    rec = logging.getLogger("uvicorn.access")
+    assert not rec.isEnabledFor(logging.INFO) or rec.disabled
