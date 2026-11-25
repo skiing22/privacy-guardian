@@ -15,3 +15,6 @@ data
 ml
 docs
 .secrets
+backups
+Caddyfile
+docker-compose*.yml

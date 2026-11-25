@@ -25,3 +25,6 @@ data/tokens.json
 .data/
 frontend/dist/
 .secrets/
+
+# Production backups on the VM hold personal data (docker-compose.prod.yml)
+backups/

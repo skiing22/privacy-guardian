@@ -1,0 +1,33 @@
+# Production on one VM (D13, P20). Use WITH the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Adds: ENV=prod, HTTPS in front (Caddy, ADR-0025: Proposed), a host folder for backups,
+# restart on failure. The app port is no longer published: only Caddy (80/443) is reachable.
+# Steps and checks: docs/runbooks/deploy.md
+services:
+  app:
+    environment:
+      ENV: prod                # never left to the image default (dev, DEV keys)
+      PUBLIC_ORIGIN: https://${DOMAIN:?set DOMAIN in .env}  # one source for the Origin check
+      TRUSTED_PROXY_COUNT: "1" # Caddy sets X-Forwarded-For to the real client IP (API 7)
+    ports: !reset []
+    expose: ["8000"]
+    volumes:
+      - ./backups:/backups     # `python -m app.manage backup /backups/<date>` lands on the host
+    restart: unless-stopped
+
+  caddy:
+    # Gets and renews the HTTPS certificate for $DOMAIN by itself (Let's Encrypt).
+    image: caddy:2
+    depends_on: [app]
+    ports: ["80:80", "443:443", "443:443/udp"]
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data       # certificates: keep, or Let's Encrypt rate limits apply
+      - caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:
