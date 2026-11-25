@@ -80,13 +80,21 @@ def main() -> None:
         "--ner-cache", help="read NER outputs from this JSONL instead of the model"
     )
     ap.add_argument("--show-errors", action="store_true")
+    ap.add_argument(
+        "--skip", default="", help="example numbers to leave out, 1-based, e.g. 23,27"
+    )
     args = ap.parse_args()
 
     examples = load(Path(args.gold))
+    skip = {int(n) - 1 for n in args.skip.split(",") if n.strip()}
     texts = [ex.text for ex in examples]
-    gold = [{(s, e, COARSE.get(t, t)) for s, e, t in ex.spans} for ex in examples]
     rules, ctx = RuleDetector(), ContextDetector()
     ner_all = ner_spans(texts, args)
+    if skip:  # a labelled subset view; the full set stays the headline (D9)
+        examples = [ex for i, ex in enumerate(examples) if i not in skip]
+        ner_all = [n for i, n in enumerate(ner_all) if i not in skip]
+        texts = [ex.text for ex in examples]
+    gold = [{(s, e, COARSE.get(t, t)) for s, e, t in ex.spans} for ex in examples]
 
     runs: dict[str, list[set[Key]]] = {
         "rules": [],

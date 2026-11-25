@@ -141,7 +141,7 @@ Admin sets a fixed action for a PII type (e.g. Aadhaar → always redact).
 
 | ID | Area | Target | Status |
 | --- | --- | --- | --- |
-| NFR-01 | Accuracy | Span F1 ≥ 0.90 on a **held-out** hand-written Indian test set never used to tune rules | 🟡 0.976 on set v1, but v1 was used to design fusion rules, so it is optimistic. Needs set v2. |
+| NFR-01 | Accuracy | Span F1 ≥ 0.90 on a **held-out** hand-written Indian test set never used to tune rules | ❌ **0.795 on held-out set v2** (`docs/results/handwritten-v2.md`); 0.922 on v2 after the address fix (ADR-0024), but v2 guided that fix, so it needs set v3. Checksum-type precision 1.0. |
 | NFR-02 | Speed | 1 page (~500 words) in < 5 s on CPU, model already loaded | ✅ ~0.3–0.5 s measured; model load ~30 s once at startup |
 | NFR-03 | Responsiveness | UI never freezes during a scan | ⬜ |
 | NFR-04 | Privacy | Raw PII never in logs or audit payloads; uploaded files deleted after 7 days `[ASSUMPTION]` | ✅ (logs) · ⬜ (deletion) |

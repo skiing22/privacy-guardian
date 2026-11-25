@@ -2,10 +2,11 @@
 # Markup: [[value|TYPE]]. One example per line. Lines starting with # are ignored.
 # Aadhaar numbers pass Verhoeff and cards pass Luhn on purpose, so rules can find them.
 # Rules for gold labels: names without titles; phone includes +91/0 prefix if written;
-# street + building + PIN next to each other = one ADDRESS; city alone = LOCATION.
+# street + building + city written together = one ADDRESS; a city alone = LOCATION;
+# a PIN is always its own ADDRESS; label words (PIN, OTP) are not part of a value (ADR-0024).
 
 Hi, I am [[Priya Venkataraman|PERSON]] from [[Kozhikode|LOCATION]]. Call me on [[98470 12345|PHONE]] or mail [[priya.v@gmail.com|EMAIL]].
-Patient [[Arjun Nair|PERSON]], age [[34|AGE]], admitted on [[12/03/2026|DATE]]. Address: [[14 MG Road|ADDRESS]], [[Kochi|LOCATION]] [[682016|ADDRESS]].
+Patient [[Arjun Nair|PERSON]], age [[34|AGE]], admitted on [[12/03/2026|DATE]]. Address: [[14 MG Road, Kochi|ADDRESS]] [[682016|ADDRESS]].
 Dear Customer, your A/c XX4521 is debited Rs 12,500 on [[05-11-2026|DATE]]. Not you? Call 1800-425-3800.
 Resume - [[Rohit Sharma|PERSON]] | [[rohit.sharma92@outlook.com|EMAIL]] | [[+91 99876 54321|PHONE]] | [[Pune|LOCATION]]
 My Aadhaar is [[3948 1726 3059|AADHAAR]] and PAN is [[ABCPS1234K|PAN]].
@@ -17,14 +18,14 @@ DOB: [[23-10-2002|DATE]], Gender: [[Male|GENDER]], Name: [[Shubham Kumar|PERSON]
 The train 12618 Mangala Lakshadweep Express leaves at 13:15 from platform 2.
 Order #4029384756 has been shipped and will arrive in 3-5 days.
 Dr. [[Lakshmi Menon|PERSON]] will see you in room 204 on [[Monday, 16 November 2026|DATE]].
-Send the documents to [[22, Nehru Nagar|ADDRESS]], [[Bhopal|LOCATION]] - [[462003|ADDRESS]].
+Send the documents to [[22, Nehru Nagar, Bhopal|ADDRESS]] - [[462003|ADDRESS]].
 Aadhaar [[5284-7163-9206|AADHAAR]] linked to mobile [[7012345678|PHONE]] successfully.
 [[Fatima Sheikh|PERSON]] ([[F|GENDER]], [[29|AGE]]) has applied for leave.
 Passport no. [[K8432917|GOV_ID]] issued at [[Thiruvananthapuram|LOCATION]].
 Contact HR at [[hr.team@infosys-demo.in|EMAIL]] for the offer letter.
 GSTIN not required for orders below Rs 50,000.
 Payment of Rs 2,999 via card [[5500 0000 0000 0004|CARD]] failed.
-[[Vikram Reddy|PERSON]] and [[Sneha Reddy|PERSON]] live at [[Flat 3B, Green Park|ADDRESS]], [[Hyderabad|LOCATION]].
+[[Vikram Reddy|PERSON]] and [[Sneha Reddy|PERSON]] live at [[Flat 3B, Green Park, Hyderabad|ADDRESS]].
 Your OTP is 482913. Do not share it with anyone.
 Admitted: [[Rahul Das|PERSON]], [[45|AGE]] yrs, [[male|GENDER]], from [[Siliguri|LOCATION]].
 Employee PAN [[AAAPL1234C|PAN]] and Aadhaar [[7401 9382 6513|AADHAAR]] verified.
