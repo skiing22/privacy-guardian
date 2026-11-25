@@ -53,6 +53,11 @@ def install(app: FastAPI) -> None:
             return error_response(request, "not_found")
         if exc.status_code == 405:
             return error_response(request, "not_found", "Not found.", status=405)
+        if exc.status_code == 413:  # the app's body limit (main.py)
+            mb = request.app.state.container.settings.max_upload_mb
+            return error_response(
+                request, "file_too_large", f"File too large (max {mb} MB).", "file"
+            )
         return error_response(request, "invalid_request", status=exc.status_code)
 
     @app.exception_handler(Exception)

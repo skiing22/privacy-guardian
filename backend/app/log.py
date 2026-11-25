@@ -42,3 +42,6 @@ def configure_logging(level: str = "INFO") -> None:
         lg = logging.getLogger(name)
         lg.handlers = []
         lg.propagate = True
+    # uvicorn's access line holds the client IP and the full URL with query values.
+    # app.access (api/middleware.py) logs each request without them (API 11).
+    logging.getLogger("uvicorn.access").disabled = True

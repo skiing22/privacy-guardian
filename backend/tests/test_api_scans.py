@@ -8,7 +8,7 @@ import docx
 import pytest
 
 from app.detectors.types import PiiType
-from tests.api_helpers import Api, api
+from tests.api_helpers import ORIGIN, Api, api
 
 TEXT = "Patient: Rahul Sharma, phone 98470 12345, email rahul@example.com."
 
@@ -230,3 +230,23 @@ def test_logs_never_hold_document_text(tmp_path: Path, caplog: pytest.LogCapture
     logged = "\n".join(f"{r.getMessage()} {r.__dict__}" for r in caplog.records)
     for secret in ("Rahul", "98470", "rahul@example.com"):
         assert secret not in logged
+
+
+def test_chunked_upload_without_length_is_cut_off_before_auth(tmp_path: Path) -> None:
+    """Bug: with no Content-Length, the whole body was read (and spooled to disk) before
+    auth ran, so anyone could send gigabytes. Now reading stops at the upload limit."""
+
+    def body():  # type: ignore[no-untyped-def]
+        yield b'--b\r\nContent-Disposition: form-data; name="file"; filename="a.txt"\r\n\r\n'
+        for _ in range(12):
+            yield b"a" * (1024 * 1024)
+        yield b"\r\n--b--\r\n"
+
+    with api(tmp_path) as a:  # no login: the limit must apply before auth
+        r = a.http.post(
+            "/api/v1/scans",
+            content=body(),
+            headers={"Origin": ORIGIN, "Content-Type": "multipart/form-data; boundary=b"},
+        )
+        assert r.status_code == 413
+        assert r.json()["error"]["code"] == "file_too_large"

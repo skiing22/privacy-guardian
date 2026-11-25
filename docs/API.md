@@ -35,6 +35,7 @@ At runtime the app makes **no outbound network calls**. Documents and their cont
 | Enums | Same values as DATABASE.md 1.2 (`pii_type`, `action`, `scan_status`, `risk_level`, `role`) |
 | Empty values | Field present with `null`, never omitted, so the client's types stay simple |
 | Unknown fields | Rejected with `422 invalid_request` (catches client bugs and typos) |
+| Body size | Every request body is capped at `MAX_UPLOAD_MB` + 64 KB, counted while streaming (also without `Content-Length`) and before login is checked; over it: `413 file_too_large` |
 | Success codes | `200` read or synchronous result · `202` accepted for background work · `204` done, no body |
 | Contract | FastAPI's OpenAPI schema is the contract; frontend types are generated from it in CI. `/docs` is on in `dev`, off in `prod` |
 
